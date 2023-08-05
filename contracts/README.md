@@ -41,6 +41,15 @@ A few tweaks...
 
 https://github.com/Cactoidal/Stardust/assets/115384394/060d171a-6fa5-4bfd-83f0-cda4fa45ab8c
 
+I decided to break the contract down a bit and create a cross-chain NFT for testing.  For this I will need to pass a struct to CCIP to instantiate the NFT on the destination chain.  I ran into some difficulty trying to encode the struct, but luckily [Chainlink's Tic-Tac-Toe example game](https://github.com/smartcontractkit/ccip-tic-tac-toe) shows how to do it properly.  
+
+I also thought more about the design of the token bridge.  Originally, I had planned to allow minting of Pilots on any chain.  To prevent collision of the tokenID, IDs would be 33 digits long and each chain would have its own identifiying first digit (i.e. Optimism starting with 1000000000000000000000000000000000, AVAX with 2000000000000000000000000000000000, etc.).  Allowing multichain origins would allow anyone to start playing on any chain, and pilot minting would seed gas on each chain, which could then be used as a faucet whenever someone bridges over without any gas in their wallet.
+
+Insecurity is the major flaw of this approach, since a malicious minting contract on one chain (or simply a mistake) could break the entire system.  Therefore, I decided to alter the contract slightly to allow Pilot minting only on Optimism.  This eliminates one major trust assumption about the system, but there's still another one to deal with: what happens if a malicious bridge is implemented?  
+
+While "true" Pilots can only be minted on Optimism, a malicious bridge could mint fake pilots that spoof the credentials of the real Pilots staked on the Optimism side of the bridge.  The contract would then believe the owner of the fake pilot is also the owner of the real Pilot, and transfer it over.
+
+To guard against this, the Pilot will have a new array of bridge approvals added to its struct.  If the Pilot doesn't have a bridge listed in its approval array, it'll be impossible to send it over that bridge, and it will ignore malicious requests to withdraw sent from that bridge.  The Pilot's owner can choose to grant or revoke approval for a given bridge.
 
 
 
