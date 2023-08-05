@@ -207,17 +207,14 @@ contract Stardust {
         uint cost;
         uint holdSize = SHIP1_SIZE;
         if (ship == 1) {
-            require (IERC20(STARCOIN).balanceOf(msg.sender) >= 100);
             cost = 100;
             holdSize = SHIP2_SIZE;
         }
         else if (ship == 2) {
-            require (IERC20(STARCOIN).balanceOf(msg.sender) >= 500);
             cost = 500;
             holdSize = SHIP3_SIZE;
         }
         else if (ship == 3) {
-            require (IERC20(STARCOIN).balanceOf(msg.sender) >= 2500);
             cost = 2500;
             holdSize = SHIP4_SIZE;
         }
@@ -243,19 +240,15 @@ contract Stardust {
         require (mod >= 1 && mod <= 4);
         uint cost;
         if (mod == 1) {
-            require (IERC20(STARCOIN).balanceOf(msg.sender) >= 300);
             cost = 300;
         }
         else if (mod == 2) {
-            require (IERC20(STARCOIN).balanceOf(msg.sender) >= 900);
             cost = 900;
         }
         else if (mod == 3) {
-            require (IERC20(STARCOIN).balanceOf(msg.sender) >= 900);
             cost = 900;
         }
         else if (mod == 4) {
-            require (IERC20(STARCOIN).balanceOf(msg.sender) >= 1800);
             cost = 1800;
         }
         cost *= 1e18;
