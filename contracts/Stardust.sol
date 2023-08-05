@@ -272,6 +272,7 @@ contract Stardust {
     function takeShipment(uint _id, uint[2][] memory _cargo, uint32 _job) internal {
         require(pilotRecord[_id].employer == msg.sender);
         require(_job > 0 && _job <= 2);
+        require(_cargo.length < 6);
         uint totalSize;
         uint shippingCost;
         for (uint i = 0; i < _cargo.length; i++) {
