@@ -9,4 +9,4 @@ Today I wrote the draft for our smart contracts, which allow players to mint pil
 We'll be using Godot as our game engine, and a nice Metamask plugin created two years ago, which you can find here:
 [https://github.com/nate-trojian/MetamaskAddon](https://github.com/nate-trojian/MetamaskAddon)
 
-I'll be modifying the script to add our game's functions, the process of which I'll talk about more in a future devblog post.
+I'll be modifying the plugin script to add our game's functions, the process of which I'll talk about more in a future devblog post.
