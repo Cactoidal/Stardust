@@ -35,7 +35,7 @@ Model from Shipyard (Strikes Back), a free public domain ship model pack on sket
 
 https://github.com/Cactoidal/Stardust/assets/115384394/336f4304-fea6-4deb-9b2e-af74e235564a
 
-While the final game will certainly look different, it's important to test how many particles and shaders the browser can handle.  Also, it's fun.
+The background shader is from [https://godotshaders.com/shader/cheap-water-shader/](https://godotshaders.com/shader/cheap-water-shader/), and is applied to a flat mesh behind the ship.  While the final game will certainly look different, it's important to test how many particles and shaders the browser can handle.  Also, it's fun.
 
 
 
