@@ -37,6 +37,13 @@ https://github.com/Cactoidal/Stardust/assets/115384394/336f4304-fea6-4deb-9b2e-a
 
 The background shader is from [https://godotshaders.com/shader/cheap-water-shader/](https://godotshaders.com/shader/cheap-water-shader/), and is applied to a flat mesh behind the ship.  While the final game will certainly look different, it's important to test how many particles and shaders the browser can handle.  Also, it's fun.
 
+A few tweaks...
+
+https://github.com/Cactoidal/Stardust/assets/115384394/060d171a-6fa5-4bfd-83f0-cda4fa45ab8c
+
+
+
+
 
 
 
