@@ -53,31 +53,33 @@ To guard against this, the Pilot will have a new array of bridge approvals added
 
 I was finally able to make _ccipReceive work once I realized my gas limit was too low.  Whoops!  I'll implement the above ideas into the main smart contracts later.  For now, I'll upload my "test contract" that I'll use for my preliminary work on the player interface in Godot.
 
-##Day 3
+## Day 3
 
 The Godot Metamask plugin allows the game client to interact directly with smart contracts.  It does this by constructing the transaction payload and passing it to the Metamask API.  This means that, for any contract we want to interact with, we need to have the function selector for any functions we plan to use, and we need to properly construct the calldata.
 
 For this initial interface, I will need three functions: the mintPilot() and pilotSend() functions on the main game contract, and the approve() function from the Pilot contract.  I used Remix to get the function selectors, by compiling the contracts and clicking the "compilation details" button, and then "function hashes".  To get an idea of what the calldata is supposed to look like, I called each function and looked at the calldata on Etherscan.  Here's what we got:
 
-4a154586  mintPilot(string,uint16)    
-                     (name,portrait 1-8)
+
+mintPilot(string,uint16)
+
+4a154586  
 
 0x4a154586000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000009726f6f6f6f6f6275730000000000000000000000000000000000000000000000
 
 
-8971ba5d  pilotSend(uint256,uint64,address,uint8)   
-                    (pilot id, chain selector, destination address, 1)
+pilotSend(uint256,uint64,address,uint8) 
 
+8971ba5d  
 
 0x8971ba5d000000000000000000000000000000000000629b8c891b267182b61400000005000000000000000000000000000000000000000000000000de41ba4fc9d91ad90000000000000000000000009c9b744269a59826dfb6c199402254401ccac1fe0000000000000000000000000000000000000000000000000000000000000001
 
 
+approve(address,uint256)
 
-095ea7b3 approve(address,uint256)
-
+095ea7b3 
 
 0x095ea7b300000000000000000000000018058e6af3af65ed30307b72d055c77f3bcd3a8e000000000000000000000000000000000000629b8c891b267182b61400000005
 
 
-[There are handy explainers online for what calldata represents,](https://www.quicknode.com/guides/ethereum-development/transactions/ethereum-transaction-calldata), but essentially it starts with the function selector and is followed by the encoded function parameters, with padding in the form of 0s to fill out the bytes of each parameter's data type.
+[There are handy explainers online for what calldata represents,](https://www.quicknode.com/guides/ethereum-development/transactions/ethereum-transaction-calldata) but essentially it starts with the function selector and is followed by the encoded function parameters, with padding in the form of 0s to fill out the bytes of each parameter's data type.
 
