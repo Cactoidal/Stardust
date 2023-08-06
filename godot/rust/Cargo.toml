@@ -1,0 +1,19 @@
+[package]
+name = "stardust-rust"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+gdnative = { version = "0.11", features = ["async"] }
+hex = "0.4.3"
+ethers = "2.0.4"
+ethers-contract = "2.0.4"
+ethers-solc = "2.0.4"
+rand = "0.8.5"
+tokio = { version = "1.28.1", features = ["full"] }
+serde_json = "1.0.96"
+serde = "1.0.163"
+futures = "0.3.28"
