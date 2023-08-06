@@ -81,5 +81,10 @@ approve(address,uint256)
 0x095ea7b300000000000000000000000018058e6af3af65ed30307b72d055c77f3bcd3a8e000000000000000000000000000000000000629b8c891b267182b61400000005
 
 
-[There are handy explainers online for what calldata represents,](https://www.quicknode.com/guides/ethereum-development/transactions/ethereum-transaction-calldata) but essentially it starts with the function selector and is followed by the encoded function parameters, with padding in the form of 0s to fill out the bytes of each parameter's data type.
+[There are handy explainers online for what calldata represents,](https://www.quicknode.com/guides/ethereum-development/transactions/ethereum-transaction-calldata) but essentially it starts with the function selector and is followed by the encoded function parameters, with padding in the form of 0s to fill out the bytes of each parameter's data type.  Each data type has a different number of bytes, requiring a different amount of padding
 
+<img width="761" alt="godot_metamask" src="https://github.com/Cactoidal/Stardust/assets/115384394/b416e211-cac0-4660-bb35-01818433c178">
+
+The plugin takes care of almost everything for you.  The main task is to format the calldata, seen here under the "action" variable.  a9059cbb is the function selector for an ERC20 transfer, 24 0s are added to fill out the recipient address, and the amount of padding necessary for the transfer amount depends on how much is being transferred.
+
+To add our own function to our game, we'll need to similarly fill in the calldata according to our function's parameters, and supply the contract address under the "to" index of the request_dict.
