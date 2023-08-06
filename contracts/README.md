@@ -101,7 +101,7 @@ Luckily I hadn't gotten too deep into using the Metamask plugin before this turn
 
 But on to Rust.  Godot Rust is a community-driven project that enables us to extend the functionality of the Godot engine; combined with ethers-rs, our game application can generate and store secret keys locally, and use them to sign transactions.
 
-I'll be using some boilerplate code that I've developed for this purpose, as to my knowledge no other tool exists to bring this kind of functionality into Godot.
+[I'll be starting with some boilerplate code](https://github.com/Cactoidal/Stardust/blob/main/godot/rust/lib.rs) that I've developed for this purpose, as to my knowledge no other tool exists to bring this kind of functionality into Godot.
 
 An especially beautiful part of ethers-rs is its ability to seamlessly interact cross-chain, as I have just discovered:
 
