@@ -81,7 +81,7 @@ approve(address,uint256)
 0x095ea7b300000000000000000000000018058e6af3af65ed30307b72d055c77f3bcd3a8e000000000000000000000000000000000000629b8c891b267182b61400000005
 
 
-[There are handy explainers online for what calldata represents,](https://www.quicknode.com/guides/ethereum-development/transactions/ethereum-transaction-calldata) but essentially it starts with the function selector and is followed by the encoded function parameters, with padding in the form of 0s to fill out the bytes of each parameter's data type.  Each data type has a different number of bytes, requiring a different amount of padding
+[There are handy explainers online for what calldata represents,](https://www.quicknode.com/guides/ethereum-development/transactions/ethereum-transaction-calldata) but essentially it starts with the function selector and is followed by the encoded function parameters, with padding in the form of 0s to fill out the bytes of each parameter's data type.  Each data type has a different number of bytes, requiring a different amount of padding.
 
 <img width="761" alt="godot_metamask" src="https://github.com/Cactoidal/Stardust/assets/115384394/b416e211-cac0-4660-bb35-01818433c178">
 
