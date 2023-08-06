@@ -88,3 +88,7 @@ approve(address,uint256)
 The plugin takes care of almost everything for you.  The main task is to format the calldata, seen here under the "action" variable.  a9059cbb is the function selector for an ERC20 transfer, 24 0s are added to fill out the recipient address, and the amount of padding necessary for the transfer amount depends on how much is being transferred.
 
 To add our own function to our game, we'll need to similarly fill in the calldata according to our function's parameters, and supply the contract address under the "to" key of the request_dict.
+
+<img width="720" alt="functions" src="https://github.com/Cactoidal/Stardust/assets/115384394/683a1349-8214-4e0f-9ac9-064132d9deb0">
+
+It would be pretty hard to do this without being able to compare to calldata on Etherscan.  In mint_pilot(), why is there a 4 wedged between 62 zeroes and 64 zeroes?  Frankly, I don't know.  approve_transfer() makes more sense, with 24 bytes padding the address and the 64 byte length of pilot_id.  Note that Godot numbers have a size limit, and very large integers will cause errors.
