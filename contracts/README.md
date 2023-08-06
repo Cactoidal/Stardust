@@ -92,3 +92,19 @@ To add our own function to our game, we'll need to similarly fill in the calldat
 <img width="720" alt="functions" src="https://github.com/Cactoidal/Stardust/assets/115384394/683a1349-8214-4e0f-9ac9-064132d9deb0">
 
 It would be pretty hard to do this without being able to compare to calldata on Etherscan.  In mint_pilot(), why is there a 4 wedged between 62 zeroes and 64 zeroes?  Frankly, I don't know.  approve_transfer() makes more sense, with 24 bytes padding the address and the 64 byte length of pilot_id.  Note that Godot numbers have a size limit, and very large integers will cause errors.
+
+## Day 3.5
+
+Due to unforeseen circumstances, the indexer and dashboard will not be available, as the person responsible will not be joining after all.  The game also will no longer be developed for the browser.  I'll have to pivot to a downloadable app instead.  But there are benefits!  Now that the game will be running locally, I can use better graphics, and most importantly, I can also use the reliable and powerful Ethers-rs rust crate to do something I haven't tried before: read and write cross-chain.  
+
+Luckily I hadn't gotten too deep into using the Metamask plugin before this turn of events, and while I've ended up not using the plugin for this project, hopefully those interested in creating web3 browser games with Godot will give it a try.
+
+But on to Rust.  Godot Rust is a community-driven project that enables us to extend the functionality of the Godot engine; combined with ethers-rs, our game application can generate and store secret keys locally, and use them to sign transactions.
+
+I'll be using some boilerplate code that I've developed for this purpose, as to my knowledge no other tool exists to bring this kind of functionality into Godot.
+
+An especially beautiful part of ethers-rs is its ability to seamlessly interact cross-chain, as I have just discovered:
+
+<img width="1064" alt="crosschain balances" src="https://github.com/Cactoidal/Stardust/assets/115384394/02c96558-6365-445c-aeb9-51961a1d9c2d">
+
+Alright, my UI may not be especially beautiful, but you get the idea.  When the game loads, it creates a keystore if it doesn't detect one, derives the player's EVM address from their secret key, and then checks their gas balance across three chains.  That was pretty easy.  Time to hook it up to my contract.
