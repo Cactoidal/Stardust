@@ -51,7 +51,7 @@ While "true" Pilots can only be minted on Optimism, a malicious bridge could min
 
 To guard against this, the Pilot will have a new array of bridge approvals added to its struct.  If the Pilot doesn't have a bridge listed in its approval array, it'll be impossible to send it over that bridge, and it will ignore malicious requests to withdraw sent from that bridge.  The Pilot's owner can choose to grant or revoke approval for a given bridge.
 
-
+I was finally able to make _ccipReceive work once I realized my gas limit was too low.  Whoops!  I'll implement the above ideas into the main smart contracts later.  For now, I'll upload my "test contract" that I'll use for my preliminary work on the player interface in Godot.
 
 
 
