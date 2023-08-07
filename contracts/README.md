@@ -121,7 +121,7 @@ Behold, the first CCIP transaction sent from Godot, using Godot Rust.
 
 ## Day 4
 
-Pilots can now travel back and forth between chains.  Now that needs to be represented in-game.  I like giving players the option of movement in games, even if it isn't integral to gameplay, and in this case you'll be playing in first person inside your ship.  Much of your time will be spent sitting around, of course, during those long flights from Sepolia to Mumbai, but the idea is to be immersive.
+Pilots can now travel back and forth between chains, which needs to be represented in-game.  I like giving players the option of movement in games, even if it isn't integral to gameplay, and in this case you'll be playing in first person inside your ship.  Much of your time will be spent sitting around, of course, during those long flights from Sepolia to Mumbai, but the idea is to be immersive.
 
 First, a somewhat better UI:
 
