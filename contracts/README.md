@@ -99,7 +99,7 @@ Due to unforeseen circumstances, the indexer and dashboard will not be available
 
 Luckily I hadn't gotten too deep into using the Metamask plugin before this turn of events, and while I've ended up not using the plugin for this project, hopefully those interested in creating web3 browser games with Godot will give it a try.
 
-But on to Rust.  Godot Rust is a community-driven project that enables us to extend the functionality of the Godot engine; combined with Ethers-rs, our game application can generate and store secret keys locally, and use them to sign transactions.
+But on to Rust.  Godot Rust is a fantastic community-driven project that enables us to extend the functionality of the Godot engine; combined with Ethers-rs, my game application can generate and store secret keys locally, and use them to sign transactions.
 
 [I'll be starting with some boilerplate code](https://github.com/Cactoidal/Stardust/blob/main/godot/rust/lib.rs) that I've developed for this purpose, as to my knowledge no other tool exists to bring this kind of functionality into Godot.
 
@@ -109,6 +109,12 @@ An especially beautiful part of Ethers-rs is its ability to seamlessly interact 
 
 Alright, my UI may not be especially beautiful, but you get the idea.  When the game loads, it creates a keystore if it doesn't detect one, derives the player's EVM address from their secret key, and then checks their gas balance across three chains.  That was pretty easy.  Time to hook it up to my contract.
 
-I've pared the contract down to make it less unwieldy.  There are now five functions to implement for Godot Rust:  createPilot(string), _ccipSend(uint64,address,1), pilotInfo(address), and lastDeparted(address) / lastArrived(address).  With these the player will be able to join the game, send their avatar between the connected chains, and see their stats.  The game will also be able to know if the player is still en-route if they restart the application during a CCIP transfer.
+I've pared the contract down to make it less unwieldy.  There are now five functions to implement for Godot Rust:  createPilot(string), _ccipSend(uint64,address,1), pilotInfo(address), and lastDeparted(address) / lastArrived(address).  With these the player will be able to join the game, send their pilot between the connected chains, and see their stats.  The game will also be able to know if the player is still en-route if they restart the application during a CCIP transfer.
 
-Ethers-rs can create a "Contract" object from an ABI.json, which I can then use to call functions. 
+Ethers-rs can create a "Contract" object from an ABI.json, which I can then use to call my functions.
+
+_ccipSend ended up being slightly tricky because the CCIP chain selectors are too large to pass as integers from gdscript into Rust.  [With some help from stackoverflow](https://stackoverflow.com/questions/32381414/converting-a-hexadecimal-string-to-a-decimal-integer) and [RapidTables](https://www.rapidtables.com/convert/number/decimal-to-hex.html), I ended up turning them into hex strings and converting them into u64 in Rust.  Problem solved.  Thanks, Shepmaster.
+
+<img width="943" alt="ccip godot" src="https://github.com/Cactoidal/Stardust/assets/115384394/636d2dd5-933b-4906-b924-de209165dcc7">
+
+Behold, the first CCIP transaction sent from Godot, using Godot Rust.
