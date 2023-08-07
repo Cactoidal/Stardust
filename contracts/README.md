@@ -95,16 +95,20 @@ It would be pretty hard to do this without being able to compare to calldata on 
 
 ## Day 3.5
 
-Due to unforeseen circumstances, the indexer and dashboard will not be available, as the person responsible will not be joining after all.  The game also will no longer be developed for the browser.  I'll have to pivot to a downloadable app instead.  But there are benefits!  Now that the game will be running locally, I can use better graphics, and most importantly, I can also use the reliable and powerful Ethers-rs rust crate to do something I haven't tried before: read and write cross-chain.  
+Due to unforeseen circumstances, the indexer and dashboard will not be available, as the person responsible will not be joining after all.  The game also will no longer be developed for the browser.  I'll have to pivot to a downloadable app instead.  But there are benefits!  Now that the game will be running locally, I can use better graphics, and most importantly, I can also use the reliable and powerful Ethers-rs Rust crate to do something I haven't tried before: read and write cross-chain.  
 
 Luckily I hadn't gotten too deep into using the Metamask plugin before this turn of events, and while I've ended up not using the plugin for this project, hopefully those interested in creating web3 browser games with Godot will give it a try.
 
-But on to Rust.  Godot Rust is a community-driven project that enables us to extend the functionality of the Godot engine; combined with ethers-rs, our game application can generate and store secret keys locally, and use them to sign transactions.
+But on to Rust.  Godot Rust is a community-driven project that enables us to extend the functionality of the Godot engine; combined with Ethers-rs, our game application can generate and store secret keys locally, and use them to sign transactions.
 
 [I'll be starting with some boilerplate code](https://github.com/Cactoidal/Stardust/blob/main/godot/rust/lib.rs) that I've developed for this purpose, as to my knowledge no other tool exists to bring this kind of functionality into Godot.
 
-An especially beautiful part of ethers-rs is its ability to seamlessly interact cross-chain, as I have just discovered:
+An especially beautiful part of Ethers-rs is its ability to seamlessly interact cross-chain, as I have just discovered:
 
 <img width="1064" alt="crosschain balances" src="https://github.com/Cactoidal/Stardust/assets/115384394/02c96558-6365-445c-aeb9-51961a1d9c2d">
 
 Alright, my UI may not be especially beautiful, but you get the idea.  When the game loads, it creates a keystore if it doesn't detect one, derives the player's EVM address from their secret key, and then checks their gas balance across three chains.  That was pretty easy.  Time to hook it up to my contract.
+
+I've pared the contract down to make it less unwieldy.  There are now five functions to implement for Godot Rust:  createPilot(string), _ccipSend(uint64,address,1), pilotInfo(address), and lastDeparted(address) / lastArrived(address).  With these the player will be able to join the game, send their avatar between the connected chains, and see their stats.  The game will also be able to know if the player is still en-route if they restart the application during a CCIP transfer.
+
+Ethers-rs can create a "Contract" object from an ABI.json, which I can then use to call functions. 
