@@ -118,3 +118,19 @@ _ccipSend ended up being slightly tricky because the CCIP chain selectors are to
 <img width="943" alt="ccip godot" src="https://github.com/Cactoidal/Stardust/assets/115384394/636d2dd5-933b-4906-b924-de209165dcc7">
 
 Behold, the first CCIP transaction sent from Godot, using Godot Rust.
+
+## Day 4
+
+Pilots can now travel back and forth between chains.  Now that needs to be represented in-game.  I like giving players the option of movement in games, even if it isn't integral to gameplay, and in this case you'll be playing in first person inside your ship.  Much of your time will be spent sitting around, of course, during those long flights from Sepolia to Mumbai, but the idea is to be immersive.
+
+First, a somewhat better UI:
+
+<img width="1018" alt="chains" src="https://github.com/Cactoidal/Stardust/assets/115384394/10fa8b37-4992-4e3c-9d0f-74f9fcc7d8f1">
+
+Once the player has gas on at least one chain, the game will allow them to start playing.  It will also create the player's pilot, if they don't have one already.  I've decided for now to drop the ERC721 functionality and just shuttle a struct back and forth between chains.  I'll also allow multichain origins for this demo, to make it easier for people to access the game.  This inherits the trust assumptions I mentioned above, and I think a more complete version of the game would require pilots to be created on a single origin chain.  At the moment, accessiblity is the goal.
+
+<img width="1018" alt="interior1" src="https://github.com/Cactoidal/Stardust/assets/115384394/36de3212-28f4-4065-a13c-c75c931d1f3b">
+
+Here's the interior of your ship.  Let's pretty it up.
+
+
