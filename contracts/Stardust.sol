@@ -67,6 +67,7 @@ contract NewPilot is CCIPReceiver, Ownable {
         require(pilots[msg.sender].level == 0);
         Pilot memory newPilot;
         newPilot.name = _name;
+        newPilot.id = msg.sender;
         newPilot.level = 1;
         newPilot.shipSize = 100;
         newPilot.onChain = true;
