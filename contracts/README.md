@@ -133,4 +133,10 @@ Once the player has gas on at least one chain, the game will allow them to start
 
 Here's the interior of your ship.  Let's pretty it up.
 
+I'd like for the player's interaction with computer consoles to be seamless, which means being able to click on a 2D surface while existing in 3D space.  This is complicated by the mouse being invisible in first-person mode.  I decided to use a raycast from the camera to detect the clickable spot on the console.  Godot's "Visible Collision Shapes" toggle makes this easier: here the blue square in the center of the screen is actually the view of the ray from the back.  Once it collides with the button on the console, I can click to interact.
+
+https://github.com/Cactoidal/Stardust/assets/115384394/083e220e-7bf6-4abc-84f6-938b5127445f
+
+
+
 
