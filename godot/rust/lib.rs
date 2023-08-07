@@ -218,7 +218,7 @@ async fn pilot_info(key: PoolArray<u8>, chain_id: u64, stardust_address: GodotSt
 let vec = &key.to_vec();
 
 let keyset = &vec[..]; 
-     
+
 let prewallet : LocalWallet = LocalWallet::from_bytes(&keyset).unwrap();
     
 let wallet: LocalWallet = prewallet.with_chain_id(chain_id);
@@ -236,12 +236,24 @@ let contract = Stardust::new(contract_address.clone(), Arc::new(client.clone()))
 
 let prequery = contract.pilot_info(pilot).call().await.unwrap();
 
-let query: Variant = format!{"{:?}", prequery}.to_variant();
+let query = json!({
+    "name": prequery.name,
+    "level": prequery.level,
+    "shipSize": prequery.ship_size,
+    "cargoType": prequery.cargo_type,
+    "cargoAmount": prequery.cargo_amount,
+    "coinBalance": prequery.coin_balance,
+    "job": prequery.job,
+    "antimatterModule": prequery.antimatter_module,
+    "recycler": prequery.recycler,
+    "dustCatcher": prequery.dust_catcher,
+    "onChain": prequery.on_chain
+});
 
 let node: TRef<Control> = unsafe { ui_node.assume_safe() };
 
 unsafe {
-    node.call("set_pilot", &[query.clone()])
+    node.call("set_pilot", &[query.to_string().to_variant()])
 };
 
 NewFuture(Ok(()))
