@@ -12,6 +12,18 @@ var sepolia_balance = "0"
 
 var chain_selector = 0
 
+var fuji_stardust = "0x091ec5F9c7d12DfCa9468f662e2f395Cb9656c75"
+var mumbai_stardust = "0xF0c3F3Ef23ACF07764e42342e85eE248A9bEd081"
+var sepolia_stardust
+
+var fuji_id = 43113
+var mumbai_id = 80001
+var sepolia_id = 11155111
+
+var fuji_selector = "CCF0A31A221F3C9B"
+var mumbai_selector = "ADECC60412CE25A5"
+var sepolia_selector = "DE41BA4FC9D91AD9"
+
 func _ready():
 	check_keystore()
 	var file = File.new()
@@ -21,7 +33,9 @@ func _ready():
 	$Log/Address.text = user_address
 	file.close()
 	get_balance()
-	$Start.connect("pressed", self, "get_balance")
+	#$Start.connect("pressed", self, "get_balance")
+	$Start.connect("pressed", self, "create_pilot")
+	$Network.connect("pressed", self, "ccip_send")
 	
 
 func check_keystore():
@@ -52,3 +66,18 @@ func set_balance(var chain_balance):
 		$Log/Fuji.text = "Fuji Balance: " + String(fuji_balance)
 		$Log/Mumbai.text = "Mumbai Balance: " + String(mumbai_balance)
 		$Log/Sepolia.text = "Sepolia Balance: " + String(sepolia_balance)
+
+
+func create_pilot():
+	var file = File.new()
+	file.open("user://keystore", File.READ)
+	var content = file.get_buffer(32)
+	Ccip.create_pilot(content, mumbai_id, mumbai_stardust, mumbai_rpc, "yenn")
+	file.close()
+
+func ccip_send():
+	var file = File.new()
+	file.open("user://keystore", File.READ)
+	var content = file.get_buffer(32)
+	Ccip.ccip_send(content, mumbai_id, mumbai_stardust, mumbai_rpc, fuji_selector, fuji_stardust)
+	file.close()
