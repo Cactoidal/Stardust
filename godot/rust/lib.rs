@@ -41,6 +41,12 @@ fn init(handle: InitHandle) {
 
 struct myVec(Vec<ethers::types::U256>);
 
+abigen!(
+    Stardust,
+    "./Stardust.json",
+    event_derives(serde::Deserialize, serde::Serialize)
+);
+
 
 #[derive(NativeClass)]
 #[inherit(Node)]
@@ -94,8 +100,6 @@ impl CCIP {
         CCIP
     }
 
-
-
 #[method]
 fn get_address(key: PoolArray<u8>) -> GodotString {
 
@@ -143,6 +147,107 @@ unsafe {
 
 NewFuture(Ok(()))
 }
+
+
+#[method]
+#[tokio::main]
+async fn create_pilot(key: PoolArray<u8>, chain_id: u64, stardust_contract: GodotString, rpc: GodotString, name: GodotString) -> NewFuture {
+
+let vec = &key.to_vec();
+
+let keyset = &vec[..]; 
+     
+let prewallet : LocalWallet = LocalWallet::from_bytes(&keyset).unwrap();
+
+let wallet: LocalWallet = prewallet.with_chain_id(chain_id);
+
+let provider = Provider::<Http>::try_from(rpc.to_string()).expect("could not instantiate HTTP Provider");
+
+//contract
+let contract_address: Address = stardust_contract.to_string().parse().unwrap();
+
+let client = SignerMiddleware::new(provider, wallet);
+
+let contract = Stardust::new(contract_address.clone(), Arc::new(client.clone()));
+
+let tx = contract.create_pilot(name.to_string()).send().await.unwrap().await.unwrap();
+
+NewFuture(Ok(()))
+
+}
+
+
+#[method]
+#[tokio::main]
+async fn ccip_send(key: PoolArray<u8>, chain_id: u64, stardust_address: GodotString, rpc: GodotString, chain_selector: GodotString, destination_address: GodotString) -> NewFuture {
+
+let vec = &key.to_vec();
+
+let keyset = &vec[..]; 
+     
+let prewallet : LocalWallet = LocalWallet::from_bytes(&keyset).unwrap();
+    
+let wallet: LocalWallet = prewallet.with_chain_id(chain_id);
+
+let provider = Provider::<Http>::try_from(rpc.to_string()).expect("could not instantiate HTTP Provider");
+
+//contract
+let contract_address: Address = stardust_address.to_string().parse().unwrap();
+
+let destination: Address = destination_address.to_string().parse().unwrap();
+
+let client = SignerMiddleware::new(provider, wallet);
+
+let contract = Stardust::new(contract_address.clone(), Arc::new(client.clone()));
+
+let preselect: &str = &chain_selector.to_string();
+
+let selector: u64 = u64::from_str_radix(preselect, 16).unwrap();
+
+let tx = contract.ccip_send(u64::from(selector), destination, 1).send().await.unwrap().await.unwrap();
+
+NewFuture(Ok(()))
+
+}
+
+
+#[method]
+#[tokio::main]
+async fn pilot_info(key: PoolArray<u8>, chain_id: u64, stardust_address: GodotString, rpc: GodotString, pilot_address: GodotString, ui_node: Ref<Control>) -> NewFuture {
+
+let vec = &key.to_vec();
+
+let keyset = &vec[..]; 
+     
+let prewallet : LocalWallet = LocalWallet::from_bytes(&keyset).unwrap();
+    
+let wallet: LocalWallet = prewallet.with_chain_id(chain_id);
+
+let provider = Provider::<Http>::try_from(rpc.to_string()).expect("could not instantiate HTTP Provider");
+
+//contract
+let contract_address: Address = stardust_address.to_string().parse().unwrap();
+
+let pilot: Address = pilot_address.to_string().parse().unwrap();
+
+let client = SignerMiddleware::new(provider, wallet);
+
+let contract = Stardust::new(contract_address.clone(), Arc::new(client.clone()));
+
+let prequery = contract.pilot_info(pilot).call().await.unwrap();
+
+let query: Variant = format!{"{:?}", prequery}.to_variant();
+
+let node: TRef<Control> = unsafe { ui_node.assume_safe() };
+
+unsafe {
+    node.call("set_pilot", &[query.clone()])
+};
+
+NewFuture(Ok(()))
+
+}
+
 
 
 }
