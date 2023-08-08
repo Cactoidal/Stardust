@@ -1,8 +1,5 @@
 extends Control
 
-#choose destination
-#not visible in transit
-
 func _ready():
 	Global.launch_console = self
 	$Destination.texture = Global.destination_chain["logo"]
