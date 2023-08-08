@@ -69,6 +69,7 @@ var sepolia_color = [1.0, 1.0, 0.68]
 
 var launch_console
 var blockspace
+var loading_indicator
 
 var entering_port_timer = -1
 var entering_port = false
