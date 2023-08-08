@@ -127,7 +127,7 @@ First, a somewhat better UI:
 
 <img width="1018" alt="chains" src="https://github.com/Cactoidal/Stardust/assets/115384394/10fa8b37-4992-4e3c-9d0f-74f9fcc7d8f1">
 
-Once the player has gas on at least one chain, the game will allow them to start playing.  It will also create the player's pilot, if they don't have one already.  I've decided for now to drop the ERC721 functionality and just shuttle a struct back and forth between chains.  I'll also allow multichain origins for this demo, to make it easier for people to access the game.  This inherits the trust assumptions I mentioned above, and I think a more complete version of the game would require pilots to be created on a single origin chain.  At the moment, accessiblity is the goal.
+Once the player has gas on at least two chains, the game will allow them to start playing.  It will also create the player's pilot, if they don't have one already.  I've decided for now to drop the ERC721 functionality and just shuttle a struct back and forth between chains.  I'll also allow multichain origins for this demo, to make it easier for people to access the game.  This inherits the trust assumptions I mentioned above, and I think a more complete version of the game would require pilots to be created on a single origin chain.  At the moment, accessiblity is the goal.
 
 <img width="1018" alt="interior1" src="https://github.com/Cactoidal/Stardust/assets/115384394/36de3212-28f4-4065-a13c-c75c931d1f3b">
 
