@@ -147,4 +147,19 @@ https://github.com/Cactoidal/Stardust/assets/115384394/05a18ed3-91d6-4766-8267-d
 
 For the FPS controller, I want to give credit for the Player.gd script to [https://github.com/GarbajYT/godot_updated_fps_controller](https://github.com/GarbajYT/godot_updated_fps_controller), it works pretty great as-is.  All I changed was the movement speed and jump height, and added a toggle for accessing the Config menu by pressing ESC.
 
+## Day 5
+
+Happy to say that the basic game loop now totally works: a player can send their pilot around to all 5 CCIP'd testnets.  A bit sparse, but it's complete.  There are a few bugs that I need to work out, and I have a few more things to tweak, but I plan to export the game soon.
+
+I still have time to add more features, which I'll write about later, but this release will exist as a back-up in case things go awry and I don't have time to get back to a working version.
+
+I'll be exporting for Mac Silicon, and potentially Linux.  Games using Godot Rust can absolutely work on different platforms, not just Mac.  But there's a catch: the Rust library needs to be compiled for the target system.  The easiest way to do this is by compiling in the target environment, which I will try to do if time allows.
+
+While I'm on the subject, I wanted to mention a couple other caveats: Godot Rust is definitely capable of running on the newest version of Godot, 4.1, as the maintainers have worked hard to update it for the new GDExtension system, and that's something I want to look into later, since it should make everything run even better than it does now.
+
+And a note about the code: while playing, you will notice that transactions and blockchain-reads will briefly lag the rest of the game, as Ethers-rs awaits a response from RPC nodes.  I would imagine there is some way to run Rust code on its own thread separate from the game's main thread, but I'm not quite sure how to do it.  
+
+As it stands, many of my Rust-Godot interactions I've coded with the expectation that the main thread will wait for a response from Rust, and for everything involving Ethers-rs, Rust async will not proceed until it gets a response from an RPC node.  So with my current code patterns the lag is a necessity, since the game otherwise would crash trying to use data it hasn't been given yet.  If somehow I could get my RPC queries to run without lagging the main game thread, I would need to rewrite my gdscript to tolerate the lag in RPC response time.
+
+Anyway, once I hammer out this version of the game, it'll be time to add a new game mechanic: cargo.
 
