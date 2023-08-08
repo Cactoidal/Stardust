@@ -1,5 +1,7 @@
 extends Control
 
+var ship_interior = load("res://ShipInterior.tscn")
+
 func _ready():
 	check_keystore()
 	var file = File.new()
@@ -9,15 +11,10 @@ func _ready():
 	$Log/Address.text = Global.user_address
 	file.close()
 	get_balance()
-	
 	$Play.connect("pressed", self, "show_faucets")
-	
-	#$Start.connect("pressed", self, "get_balance")
-	#$Start.connect("pressed", self, "create_pilot")
-	
-	#$Start.connect("pressed", self, "check_pilot")
-	
-	#$Network.connect("pressed", self, "ccip_send")
+	$Log/Start.connect("pressed", self, "start_game")
+	$Log/Refresh.connect("pressed", self, "get_balance")
+	$PilotMaker/Create.connect("pressed", self, "create_pilot")
 	
 	$Log/Copy.connect("pressed",self,"copy_address")
 	$Log/Advanced.connect("pressed", self, "open_config")
@@ -91,47 +88,66 @@ func save_rpc_settings():
 	Global.sepolia_rpc = $Log/Config/Sepolia/RPC.text
 	Global.fuji_rpc = $Log/Config/Fuji/RPC.text
 	$Log/Config.visible = false
+	
 
-func create_pilot():
-	var file = File.new()
-	file.open("user://keystore", File.READ)
-	var content = file.get_buffer(32)
-	Ccip.create_pilot(content, Global.mumbai_id, Global.mumbai_stardust, Global.mumbai_rpc, "yenn")
-	file.close()
-
-func ccip_send():
-	var file = File.new()
-	file.open("user://keystore", File.READ)
-	var content = file.get_buffer(32)
-	Ccip.ccip_send(content, Global.mumbai_id, Global.mumbai_stardust, Global.mumbai_rpc, Global.fuji_selector, Global.fuji_stardust)
-	file.close()
-
-func ccip_send2():
-	var file = File.new()
-	file.open("user://keystore", File.READ)
-	var content = file.get_buffer(32)
-	Ccip.ccip_send(content, Global.fuji_id, Global.fuji_stardust, Global.fuji_rpc, Global.mumbai_selector, Global.mumbai_stardust)
-	file.close()
-
+var gas_ok = false
+var in_flight = false
 
 func check_pilot():
 	var file = File.new()
 	file.open("user://keystore", File.READ)
 	var content = file.get_buffer(32)
 	var located = false
-	Ccip.pilot_info(content, Global.mumbai_id, Global.mumbai_stardust, Global.mumbai_rpc, Global.user_address, self)
-	if parse_json(Global.pilot).onChain == true:
-		$Log/Pilot.text = "Mumbai"
-		Global.current_chain = "Mumbai"
-		located = true
-	Ccip.pilot_info(content, Global.fuji_id, Global.fuji_stardust, Global.fuji_rpc, Global.user_address, self)
-	if parse_json(Global.pilot).onChain == true:
-		$Log/Pilot.text = "Fuji"
-		Global.current_chain = "Fuji"
-		located = true
-	file.close()
+	
+	for lookup in ["Optimism", "Arbitrum", "Sepolia", "Fuji", "Mumbai"]:
+		var chain = Global.get_chain_info(lookup)
+		Ccip.pilot_info(content, chain["chain_id"], chain["stardust_contract"], chain["rpc"], Global.user_address, self)
+		if parse_json(Global.pilot).onChain == true:
+			Global.current_chain = Global.get_chain_info(chain["name"])
+			located = true
+			gas_ok = true
+			Global.available_chains.erase(lookup)
+			Global.destination_chain = Global.get_chain_info(Global.available_chains[0])
+			Global.chain_selector = 0
+			#set location indicators inside ship
+		
+		
 	if located == false:
-		$Log/Pilot.text = "In Transit"
+		get_departure_time()
+		if ephem_departure_time == 0:
+			get_balance()
+			var enabled_chains = 0
+			for another_lookup in ["Optimism", "Arbitrum", "Sepolia", "Fuji", "Mumbai"]:
+				if Global.get_chain_info(another_lookup)["player_balance"] > 0:
+					Global.current_chain = Global.get_chain_info(another_lookup)
+					enabled_chains += 1
+			if enabled_chains >= 2:
+				Global.create_player_pilot = true
+				gas_ok = true
+					
+		else:
+			in_flight = true
+	file.close()
+
+
+var ephem_departure_time = 0
+var chain_check
+func get_departure_time():
+	var file = File.new()
+	file.open("user://keystore", File.READ)
+	var content = file.get_buffer(32)
+	for lookup in ["Optimism", "Arbitrum", "Sepolia", "Fuji", "Mumbai"]:
+		var chain = Global.get_chain_info(lookup)
+		chain_check = Global.get_chain_info(lookup)
+		Ccip.get_departure(content, chain["chain_id"], chain["stardust_contract"], chain["rpc"], Global.user_address, self)
+	file.close()
+	
+#Called from Rust
+func set_departure_time(var departure):
+	if int(departure) > ephem_departure_time:
+		ephem_departure_time = int(departure)
+		Global.current_chain = chain_check
+
 
 func pilot_info():
 	var file = File.new()
@@ -143,6 +159,40 @@ func pilot_info():
 #Called from Rust
 func set_pilot(var _pilot):
 	Global.pilot = _pilot
+
+func start_game():
+	check_pilot()
 	
+	if Global.create_player_pilot == true:
+		$Log.visible = false
+		$PilotMaker.visible = true
+	else:
+		if gas_ok == true:
+			var into_ship = ship_interior.instance()
+			get_parent().get_parent().add_child(into_ship)
+			get_parent().queue_free()
+		elif in_flight == true:
+			Global.in_flight = true
+			Global.start_in_warp = true
+			Global.entering_port = true
+			Global.entering_port_timer = -0.1
+			Global.destination_chain = Global.get_chain_info(Global.available_chains[0])
+			var into_ship = ship_interior.instance()
+			get_parent().get_parent().add_child(into_ship)
+			get_parent().queue_free()
+		else:
+			$Log/Start.text = "Get Gas On 2 Chains"
+
+func create_pilot():
+	if $PilotMaker/Name.text.length() > 0:
+		var file = File.new()
+		file.open("user://keystore", File.READ)
+		var content = file.get_buffer(32)
+		Ccip.create_pilot(content, Global.current_chain["chain_id"], Global.current_chain["stardust_contract"], Global.current_chain["rpc"], $PilotMaker/Name.text)
+		file.close()
+		var into_ship = ship_interior.instance()
+		get_parent().get_parent().add_child(into_ship)
+		get_parent().queue_free()
+			
 
 
