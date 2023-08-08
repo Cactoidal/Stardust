@@ -1,5 +1,7 @@
 extends KinematicBody
 
+# Credit: the good Garbaj, https://github.com/GarbajYT/godot_updated_fps_controller
+
 var speed = 11
 const ACCEL_DEFAULT = 7
 const ACCEL_AIR = 1
