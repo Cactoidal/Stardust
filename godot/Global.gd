@@ -48,11 +48,11 @@ var sepolia_selector = "DE41BA4FC9D91AD9"
 var optimism_selector = "24F9B897EF58A922"
 var arbitrum_selector = "54ABF9FB1AFEAF95"
 
-var fuji_flight_time = 3#300
-var optimism_flight_time = 3#1500
-var arbitrum_flight_time = 3#1500
-var mumbai_flight_time = 3#1500
-var sepolia_flight_time = 3#1500
+var fuji_flight_time = 300
+var optimism_flight_time = 1500
+var arbitrum_flight_time = 1500
+var mumbai_flight_time = 1500
+var sepolia_flight_time = 1500
 
 var fuji_logo = load("res://buttons/Avalanche.png")
 var arbitrum_logo = load("res://buttons/arbitrum.png")
@@ -74,6 +74,7 @@ var entering_port_timer = -1
 var entering_port = false
 
 var start_in_warp = false
+var route_logo
 
 func get_chain_info(var chain):
 	match chain:
@@ -133,9 +134,11 @@ func check_pilot():
 		entering_port = true
 		entering_port_timer = 20
 		launch_console.get_node("LAUNCH").text = "ARRIVING..."
-		print("checking for pilot")
 		return false
-		
+
+#Called from Rust
+func set_pilot(var _pilot):
+	pilot = _pilot
 
 func complete_flight():
 	blockspace.warping = false
