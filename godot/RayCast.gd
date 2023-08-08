@@ -33,7 +33,6 @@ func _process(delta):
 						var file = File.new()
 						file.open("user://keystore", File.READ)
 						var content = file.get_buffer(32)
-						#Ccip.ccip_send(content, Global.fuji_id, Global.fuji_stardust, Global.fuji_rpc, Global.mumbai_selector, Global.mumbai_stardust)
 						Ccip.ccip_send(content, Global.current_chain["chain_id"], Global.current_chain["stardust_contract"], Global.current_chain["rpc"], Global.destination_chain["chain_selector"], Global.destination_chain["stardust_contract"])
 						file.close()
 						
