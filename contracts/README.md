@@ -157,7 +157,9 @@ I'll be exporting for Mac Silicon, and potentially Linux.  Games using Godot Rus
 
 While I'm on the subject, I wanted to mention a couple other caveats: Godot Rust is definitely capable of running on the newest version of Godot, 4.1, as the maintainers have worked hard to update it for the new GDExtension system, and that's something I want to look into later, since it should make everything run even better than it does now.
 
-And a note about the code: while playing, you will notice that transactions and blockchain-reads will briefly lag the rest of the game, as Ethers-rs awaits a response from RPC nodes.  I would imagine there is some way to run Rust code on its own thread separate from the game's main thread, but I'm not quite sure how to do it.  
+And a note about the code: while playing, you will notice that transactions and blockchain-reads will briefly lag the rest of the game, as Ethers-rs awaits a response from RPC nodes.  I would imagine there is some way to run Rust code on its own thread separate from the game's main thread, but I'm not quite sure how to do it.
+
+https://github.com/Cactoidal/Stardust/assets/115384394/15acf4e4-5c0a-475a-a0ea-e4a4ea0befec
 
 As it stands, many of my Rust-Godot interactions I've coded with the expectation that the main thread will wait for a response from Rust, and for everything involving Ethers-rs, Rust async will not proceed until it gets a response from an RPC node.  So with my current code patterns the lag is a necessity, since the game otherwise would crash trying to use data it hasn't been given yet.  If somehow I could get my RPC queries to run without lagging the main game thread, I would need to rewrite my gdscript to tolerate the lag in RPC response time.
 
