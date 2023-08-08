@@ -145,4 +145,6 @@ My RayCast, for example, is colliding with a 3D collision shape attached to a pa
 
 https://github.com/Cactoidal/Stardust/assets/115384394/05a18ed3-91d6-4766-8267-dea55565f9ba
 
+For the FPS controller, I want to give credit for the Player.gd script to [https://github.com/GarbajYT/godot_updated_fps_controller](https://github.com/GarbajYT/godot_updated_fps_controller), it works pretty great as-is.  All I changed was the movement speed and jump height.
+
 
