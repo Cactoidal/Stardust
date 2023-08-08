@@ -137,6 +137,12 @@ I'd like for the player's interaction with computer consoles to be seamless, whi
 
 https://github.com/Cactoidal/Stardust/assets/115384394/083e220e-7bf6-4abc-84f6-938b5127445f
 
+I spent a little time reorganizing the game's variables into a globally-available singleton.  Godot "scenes" are bundles of nodes, with a node being a generic game object like a 3D mesh, a 2D label, a sound, and so on.  Nodes are organized into a hierarchical tree, and they can refer to one another by referencing their positions in the tree.  
 
+When a game needs its variables to be accessible to all nodes at all times, it can be helpful to create a singleton script and load it at runtime using Godot's Autoload feature.  This way, there's a point of reference for every node in the game, no matter when it comes into existence.  It also makes pathing between nodes much simpler.  
+
+My RayCast, for example, is colliding with a 3D collision shape attached to a parent of a Viewport containing the 2D buttons.  Rather than trying to path to the buttons directly from the RayCast, I can put a script on the Viewport to load itself as a variable into the singleton.  The RayCast can then call to the buttons using that variable in the singleton.
+
+https://github.com/Cactoidal/Stardust/assets/115384394/05a18ed3-91d6-4766-8267-dea55565f9ba
 
 
