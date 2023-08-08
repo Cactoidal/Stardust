@@ -10,7 +10,7 @@ var current_color
 func _ready():
 	Global.blockspace = self 
 	if Global.start_in_warp == true:
-		current_color = warp_color
+		current_color = warp_color.duplicate()
 	else:
 		current_color = Global.current_chain["color"].duplicate()
 	$WorldEnvironment.get_environment().background_color = Color(current_color[0],current_color[1],current_color[2],1.0)
