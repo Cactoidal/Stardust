@@ -190,7 +190,9 @@ The hash is put on-chain, and it's impossible for anyone but you to know what it
 
 When you arrive at your destination, you must sell your cargo.  This is accomplished by submitting the three values and the salt on-chain (Godot will save these in a local manifest file for you, so no worries about losing your cargo if you close the application).  Indeed, the game handles the entire process - so, while the smart contract is coded to prevent erroneous transactions from slipping through, the game itself won't allow you to create a faulty manifest.
 
-The smart contract checks that your submitted values are valid.  The amounts you pick cannot exceed the size of your hold, and you also can't put more things in your hold than you have money to buy.  The cost of the goods is subtracted from your balance retroactively (but you will make more in revenue than you lose from the cost of business - especially if you successfully shipped Contraband).
+The smart contract checks that your submitted values are valid.  It first concatenates the values, hashes them, and compares the hash to the hash you submitted previously and carried cross-chain in your pilot struct.  It then checks the size and cost of your cargo.  The amounts you pick cannot exceed the size of your hold, and you also can't put more things in your hold than you have money to buy.
+
+The cost of the goods is subtracted from your balance retroactively (but you will make more in revenue than you lose from the cost of business - especially if you successfully shipped Contraband).
 
 If there's a claim on your goods, the smart contract checks to see if you had any Contraband.  You could certainly choose to NOT reveal, and not lose your money - but then your ship would be permanently bricked, because you cannot leave the chain until you claim.
 
