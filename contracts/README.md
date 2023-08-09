@@ -163,5 +163,5 @@ https://github.com/Cactoidal/Stardust/assets/115384394/15acf4e4-5c0a-475a-a0ea-e
 
 As it stands, many of my Rust-Godot interactions I've coded with the expectation that the main thread will wait for a response from Rust, and for everything involving Ethers-rs, Rust async will not proceed until it gets a response from an RPC node.  So with my current code patterns the lag is a necessity, since the game otherwise would crash trying to use data it hasn't been given yet.  If somehow I could get my RPC queries to run without lagging the main game thread, I would need to rewrite my gdscript to tolerate the lag in RPC response time.
 
-Anyway, once I hammer out this version of the game, it'll be time to add a new game mechanic: cargo.
+And there it is: [the pre-release of Stardust](https://github.com/Cactoidal/Stardust/releases), and all game files have been uploaded.  Checkpoint reached.  Now that I've hammered out the basic version of the game, it's time to add more game mechanics: cargo, and exploring the ship itself.
 
