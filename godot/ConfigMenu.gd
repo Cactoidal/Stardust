@@ -56,3 +56,10 @@ func close():
 	player.menu_open = false
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	queue_free()
+
+func get_balance():
+	Ccip.get_balance(Global.user_address, Global.fuji_rpc, self)
+	Ccip.get_balance(Global.user_address, Global.mumbai_rpc, self)
+	Ccip.get_balance(Global.user_address, Global.sepolia_rpc, self)
+	Ccip.get_balance(Global.user_address, Global.optimism_rpc, self)
+	Ccip.get_balance(Global.user_address, Global.arbitrum_rpc, self)
