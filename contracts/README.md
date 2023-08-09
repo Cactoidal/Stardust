@@ -188,7 +188,7 @@ Because the contents of your cargo are obscured by a hash.  Before leaving one c
 
 The hash is put on-chain, and it's impossible for anyone but you to know what it represents.  Which means that anyone putting a claim down on your cargo is taking a risk that you may or may not be carrying Contraband - because they can't actually see inside your ship.   They just see the hash!
 
-When you arrive at your destination, you must sell your cargo.  This is accomplished by submitting the three values and the salt on-chain (Godot will save these in a local manifest file for you, so no worries about losing your cargo if you close the application).  Indeed, Godot handles the entire process - so, while the smart contract is coded to prevent erroneous transactions from slipping through, Godot itself won't allow you to create a faulty manifest.
+When you arrive at your destination, you must sell your cargo.  This is accomplished by submitting the three values and the salt on-chain (Godot will save these in a local manifest file for you, so no worries about losing your cargo if you close the application).  Indeed, the game handles the entire process - so, while the smart contract is coded to prevent erroneous transactions from slipping through, the game itself won't allow you to create a faulty manifest.
 
 The smart contract checks that your submitted values are valid.  The amounts you pick cannot exceed the size of your hold, and you also can't put more things in your hold than you have money to buy.  The cost of the goods is subtracted from your balance retroactively (but you will make more in revenue than you lose from the cost of business - especially if you successfully shipped Contraband).
 
