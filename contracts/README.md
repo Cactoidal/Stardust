@@ -196,6 +196,8 @@ The cost of the goods is subtracted from your balance retroactively (but you wil
 
 If there's a claim on your goods, the smart contract checks to see if you had any Contraband.  You could certainly choose to NOT reveal, and not lose your money - but then your ship would be permanently bricked, because you cannot leave the chain until you claim.
 
+![commit-reveal](https://github.com/Cactoidal/Stardust/assets/115384394/4279c398-a18d-4429-bedf-deb258595423)
+
 When I say "money", of course, I'm referring to game tokens, which are to be had in abundance, and it's not the end of the world if you happen to get caught.  But as ship sizes get larger and the allure of massive Contraband payouts tantalize players, the risk of putting down claims on big ships could pay off in a big way.
 
 Anyway, this required some creative engineering, since Godot needs to create a hash that takes into account abi.encode.  Ultimately I solved this with Ethers-rs, which has an AbiEncode trait just for this purpose.  Combined with the OpenSSL crate's SHA256, Godot Rust can produce the hash no problem.   Now I just need to create the UI that puts this all together in-game.
