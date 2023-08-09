@@ -1,0 +1,429 @@
+[gd_scene load_steps=46 format=2]
+
+[ext_resource path="res://Player.gd" type="Script" id=1]
+[ext_resource path="res://Sphere.gd" type="Script" id=2]
+[ext_resource path="res://MetalPlates008_2K_Color.jpg" type="Texture" id=3]
+[ext_resource path="res://SimpleInterface.tscn" type="PackedScene" id=4]
+[ext_resource path="res://RayCast.gd" type="Script" id=5]
+[ext_resource path="res://buttons/arbitrum.png" type="Texture" id=6]
+[ext_resource path="res://Blockspace.tscn" type="PackedScene" id=7]
+[ext_resource path="res://RouteLogo.gd" type="Script" id=8]
+[ext_resource path="res://MusicPlayer.tscn" type="PackedScene" id=9]
+
+[sub_resource type="CubeMesh" id=1]
+size = Vector3( 80, 20, 40 )
+
+[sub_resource type="SpatialMaterial" id=20]
+albedo_texture = ExtResource( 3 )
+metallic = 0.4
+metallic_specular = 0.1
+
+[sub_resource type="SpatialMaterial" id=10]
+flags_transparent = true
+albedo_color = Color( 0.278431, 0.435294, 0.478431, 0.184314 )
+
+[sub_resource type="QuadMesh" id=4]
+material = SubResource( 10 )
+size = Vector2( 30, 18 )
+
+[sub_resource type="BoxShape" id=9]
+extents = Vector3( 30, 10, 1 )
+
+[sub_resource type="Environment" id=5]
+background_mode = 1
+glow_enabled = true
+
+[sub_resource type="SpatialMaterial" id=6]
+flags_unshaded = true
+
+[sub_resource type="CubeMesh" id=7]
+material = SubResource( 6 )
+size = Vector3( 0.1, 0.1, 0.1 )
+
+[sub_resource type="CapsuleShape" id=8]
+height = 2.0
+
+[sub_resource type="CubeMesh" id=11]
+
+[sub_resource type="PrismMesh" id=12]
+
+[sub_resource type="SpatialMaterial" id=13]
+emission_enabled = true
+emission = Color( 0, 0.152941, 1, 1 )
+emission_energy = 20.0
+emission_operator = 0
+emission_on_uv2 = false
+
+[sub_resource type="PlaneMesh" id=14]
+material = SubResource( 13 )
+
+[sub_resource type="ViewportTexture" id=33]
+viewport_path = NodePath("Console/Screen/Sprite3D/Viewport")
+
+[sub_resource type="BoxShape" id=34]
+extents = Vector3( 0.214121, 0.404713, 0.1 )
+
+[sub_resource type="BoxShape" id=35]
+extents = Vector3( 0.5, 0.2, 0.1 )
+
+[sub_resource type="BoxShape" id=41]
+extents = Vector3( 1, 2, 1 )
+
+[sub_resource type="Shader" id=15]
+code = "shader_type spatial;
+render_mode specular_schlick_ggx, unshaded, cull_back, async_visible;//
+
+uniform vec4 tint_color : hint_color = vec4( 0.3, 0.4, 0.45, 1.0);
+uniform sampler2D caustics : hint_white;
+uniform float slowdown : hint_range( 0.1, 10.0, 0.1 ) = 5.0;
+uniform float time_caust : hint_range( 0.01, 1.0, 0.01 ) = 0.13;
+uniform float caust_form : hint_range( 0.01, 1.0, 0.01 ) = 0.15;
+uniform float tile: hint_range( 0.1, 16.0, 0.1 ) = 4.0;
+
+void fragment() {
+
+// Caustics
+	float caustics_form = texture(caustics , UV * (tile + sin(TIME / slowdown) * time_caust )).r;//
+	vec2 caustics_uv =  UV * (tile + cos(TIME / slowdown) * time_caust ) + caustics_form * caust_form ;
+	float caustics_final = texture(caustics, caustics_uv).r;
+	ALBEDO = (1.0-SCREEN_UV.y) * caustics_final * tint_color.rgb ;
+	ALPHA = min(SCREEN_UV.y + 0.5, 1.0 ) * tint_color.a;
+		
+}"
+
+[sub_resource type="OpenSimplexNoise" id=18]
+seed = 3
+period = 25.0
+
+[sub_resource type="NoiseTexture" id=19]
+seamless = true
+noise = SubResource( 18 )
+
+[sub_resource type="ShaderMaterial" id=16]
+shader = SubResource( 15 )
+shader_param/tint_color = Color( 0.639216, 0.054902, 0.933333, 1 )
+shader_param/slowdown = 6.0
+shader_param/time_caust = 0.13
+shader_param/caust_form = 0.15
+shader_param/tile = 4.0
+shader_param/caustics = SubResource( 19 )
+
+[sub_resource type="SphereMesh" id=17]
+material = SubResource( 16 )
+radius = 50.0
+height = 100.0
+
+[sub_resource type="SpatialMaterial" id=21]
+albedo_color = Color( 0.215686, 0.211765, 0.211765, 1 )
+
+[sub_resource type="CubeMesh" id=22]
+material = SubResource( 21 )
+size = Vector3( 8, 2, 8 )
+
+[sub_resource type="SpatialMaterial" id=23]
+albedo_color = Color( 0.815686, 0.996078, 1, 1 )
+emission_enabled = true
+emission = Color( 0.72549, 0.976471, 1, 1 )
+emission_energy = 3.0
+emission_operator = 0
+emission_on_uv2 = false
+
+[sub_resource type="PlaneMesh" id=24]
+material = SubResource( 23 )
+size = Vector2( 7.8, 7.8 )
+
+[sub_resource type="Shader" id=29]
+code = "shader_type spatial;
+render_mode specular_schlick_ggx, unshaded, cull_back, async_visible;//
+
+uniform vec4 tint_color : hint_color = vec4( 0.3, 0.4, 0.45, 1.0);
+uniform sampler2D caustics : hint_white;
+uniform float slowdown : hint_range( 0.1, 10.0, 0.1 ) = 5.0;
+uniform float time_caust : hint_range( 0.01, 1.0, 0.01 ) = 0.13;
+uniform float caust_form : hint_range( 0.01, 1.0, 0.01 ) = 0.15;
+uniform float tile: hint_range( 0.1, 16.0, 0.1 ) = 4.0;
+
+void fragment() {
+
+// Caustics
+	float caustics_form = texture(caustics , UV * (tile + sin(TIME / slowdown) * time_caust )).r;//
+	vec2 caustics_uv =  UV * (tile + cos(TIME / slowdown) * time_caust ) + caustics_form * caust_form ;
+	float caustics_final = texture(caustics, caustics_uv).r;
+	ALBEDO = (1.0-SCREEN_UV.y) * caustics_final * tint_color.rgb ;
+	ALPHA = min(SCREEN_UV.y + 0.5, 1.0 ) * tint_color.a;
+		
+}"
+
+[sub_resource type="OpenSimplexNoise" id=31]
+period = 24.0
+
+[sub_resource type="NoiseTexture" id=32]
+seamless = true
+noise = SubResource( 31 )
+
+[sub_resource type="ShaderMaterial" id=30]
+shader = SubResource( 29 )
+shader_param/tint_color = Color( 0.407843, 0.690196, 0.760784, 1 )
+shader_param/slowdown = 3.0
+shader_param/time_caust = 0.13
+shader_param/caust_form = 0.15
+shader_param/tile = 4.0
+shader_param/caustics = SubResource( 32 )
+
+[sub_resource type="SphereMesh" id=28]
+material = SubResource( 30 )
+radius = 3.0
+height = 6.0
+
+[sub_resource type="BoxShape" id=40]
+extents = Vector3( 4, 1, 4 )
+
+[sub_resource type="SpatialMaterial" id=36]
+albedo_color = Color( 0, 0, 0, 1 )
+
+[sub_resource type="CubeMesh" id=37]
+material = SubResource( 36 )
+
+[sub_resource type="SpatialMaterial" id=38]
+emission_enabled = true
+emission = Color( 0, 0.152941, 1, 1 )
+emission_energy = 20.0
+emission_operator = 0
+emission_on_uv2 = false
+
+[sub_resource type="QuadMesh" id=39]
+material = SubResource( 38 )
+size = Vector2( 2, 2 )
+
+[node name="ShipInterior" type="Spatial"]
+
+[node name="CSGCombiner" type="CSGCombiner" parent="."]
+operation = 2
+use_collision = true
+
+[node name="CSGMesh" type="CSGMesh" parent="CSGCombiner"]
+mesh = SubResource( 1 )
+
+[node name="CSGBox" type="CSGBox" parent="CSGCombiner"]
+operation = 2
+width = 78.0
+height = 18.0
+depth = 38.0
+material = SubResource( 20 )
+
+[node name="CSGBox2" type="CSGBox" parent="CSGCombiner"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 37.9099, -1.83796, 0 )
+operation = 2
+width = 8.0
+height = 10.0
+depth = 30.0
+
+[node name="Window" type="MeshInstance" parent="."]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 39.5772, -0.668728, 0 )
+mesh = SubResource( 4 )
+
+[node name="StaticBody" type="StaticBody" parent="Window"]
+
+[node name="CollisionShape" type="CollisionShape" parent="Window/StaticBody"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3.64657e-08, 0, -0.834242 )
+shape = SubResource( 9 )
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource( 5 )
+
+[node name="CPUParticles" type="CPUParticles" parent="."]
+transform = Transform( 0.0187437, 0, -0.999824, 0, 1, 0, 0.999824, 0, 0.0187437, 557.549, 52.1585, -0.482766 )
+amount = 5000
+lifetime = 10.0
+preprocess = 10.0
+mesh = SubResource( 7 )
+emission_shape = 2
+emission_box_extents = Vector3( 50, 30, 10 )
+gravity = Vector3( 0, -1, 10 )
+
+[node name="OmniLight" type="OmniLight" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 24.4691, 0, 0 )
+light_energy = 0.1
+omni_range = 25.0
+
+[node name="Player" type="KinematicBody" parent="."]
+transform = Transform( -0.997317, 0, 0.0732033, 0, 1, 0, -0.0732033, 0, -0.997317, 0, -6.64109, 0 )
+script = ExtResource( 1 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Player"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0 )
+shape = SubResource( 8 )
+
+[node name="Head" type="Spatial" parent="Player"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.09872, 0 )
+
+[node name="Camera" type="Camera" parent="Player/Head"]
+transform = Transform( -0.258819, 0, -0.965926, 0, 1, 0, 0.965926, 0, -0.258819, 0, 0, 0 )
+far = 1000.0
+
+[node name="RayCast" type="RayCast" parent="Player/Head/Camera"]
+enabled = true
+cast_to = Vector3( 0, 0, -4.8 )
+collision_mask = 8
+script = ExtResource( 5 )
+
+[node name="Reticle" type="Control" parent="Player"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -5.0
+margin_top = -5.0
+margin_right = 5.0
+margin_bottom = 5.0
+
+[node name="Target" type="ColorRect" parent="Player/Reticle"]
+margin_right = 10.0
+margin_bottom = 10.0
+color = Color( 1, 1, 1, 0.196078 )
+
+[node name="Loading" type="Label" parent="Player/Reticle"]
+visible = false
+margin_left = -493.0
+margin_top = 272.0
+margin_right = -384.0
+margin_bottom = 297.0
+rect_scale = Vector2( 2, 2 )
+text = "LOADING..."
+
+[node name="Console" type="MeshInstance" parent="."]
+transform = Transform( 2, 0, 0, 0, 1, 0, 0, 0, 1, 7.09504, -8.25251, 17.9678 )
+mesh = SubResource( 11 )
+
+[node name="Monitor" type="MeshInstance" parent="Console"]
+transform = Transform( 0.00640489, 0.0175412, 0.999826, 0.342928, 0.939176, -0.0186739, -0.93934, 0.342988, -4.37038e-08, 0.00489807, 1.66895, 0.242971 )
+mesh = SubResource( 12 )
+
+[node name="Screen" type="MeshInstance" parent="Console"]
+transform = Transform( 1, 0, 0, 0, 0.72499, 0.68876, 0, -0.68876, 0.72499, 0, 1.80109, -0.306248 )
+mesh = SubResource( 14 )
+
+[node name="OmniLight" type="OmniLight" parent="Console/Screen"]
+transform = Transform( 0.5, 0, 0, 0, 1, 0, 0, 0, 1, 0.0596166, 1.96893, -0.403868 )
+light_color = Color( 0, 0.180392, 1, 1 )
+light_energy = 0.01
+omni_range = 6.48755
+
+[node name="Sprite3D" type="Sprite3D" parent="Console/Screen"]
+transform = Transform( -0.99994, 0.00378657, -0.00398575, -0.015903, 0.00266549, 0.999965, 0.0151882, 0.999968, -0.00260535, -0.0568845, 0.0122929, 0.0835953 )
+texture = SubResource( 33 )
+
+[node name="Viewport" type="Viewport" parent="Console/Screen/Sprite3D"]
+size = Vector2( 240, 185 )
+transparent_bg = true
+render_target_v_flip = true
+
+[node name="SimpleInterface" parent="Console/Screen/Sprite3D/Viewport" instance=ExtResource( 4 )]
+
+[node name="LeftButton" type="StaticBody" parent="Console/Screen/Sprite3D"]
+collision_layer = 8
+collision_mask = 8
+
+[node name="CollisionShape" type="CollisionShape" parent="Console/Screen/Sprite3D/LeftButton"]
+transform = Transform( 1, 0, 2.32831e-10, -3.72529e-09, 1, 2.98023e-08, 4.65661e-09, 0, 1, -0.717609, 0.146099, 0.0566998 )
+shape = SubResource( 34 )
+
+[node name="RightButton" type="StaticBody" parent="Console/Screen/Sprite3D"]
+transform = Transform( 1, 0, 0, -1.86265e-09, 1, 2.98023e-08, 3.72529e-09, 0, 1, 0.867458, -0.0131397, 0.0138302 )
+collision_layer = 8
+collision_mask = 8
+
+[node name="CollisionShape" type="CollisionShape" parent="Console/Screen/Sprite3D/RightButton"]
+transform = Transform( 1, 9.31323e-10, -6.98492e-10, -1.86265e-09, 1, 2.98023e-08, 5.58794e-09, 0, 1, -0.232742, 0.147274, 0.0713215 )
+shape = SubResource( 34 )
+
+[node name="LaunchButton" type="StaticBody" parent="Console/Screen/Sprite3D"]
+transform = Transform( 1, 0, 0, -5.58794e-09, 1, 2.98023e-08, 6.51926e-09, 0, 1, 0.155573, -0.329432, 0.314852 )
+collision_layer = 8
+collision_mask = 8
+
+[node name="CollisionShape" type="CollisionShape" parent="Console/Screen/Sprite3D/LaunchButton"]
+transform = Transform( 1, 5.58794e-09, 2.32831e-10, -1.86265e-09, 1, 2.98023e-08, 2.42144e-08, 0, 1, -0.176058, -0.468464, -0.34441 )
+shape = SubResource( 35 )
+
+[node name="StaticBody" type="StaticBody" parent="Console"]
+
+[node name="CollisionShape" type="CollisionShape" parent="Console/StaticBody"]
+shape = SubResource( 41 )
+
+[node name="Nebula" type="Spatial" parent="."]
+visible = false
+
+[node name="Sphere" type="MeshInstance" parent="Nebula"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 159.559, 0, -32.6419 )
+mesh = SubResource( 17 )
+script = ExtResource( 2 )
+
+[node name="Sphere2" type="MeshInstance" parent="Nebula"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 566.559, 47, 113.358 )
+mesh = SubResource( 17 )
+script = ExtResource( 2 )
+
+[node name="Sphere3" type="MeshInstance" parent="Nebula"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 338.449, -58.225, 250.266 )
+mesh = SubResource( 17 )
+script = ExtResource( 2 )
+
+[node name="Sphere4" type="MeshInstance" parent="Nebula"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 441.449, 160.923, 255.54 )
+mesh = SubResource( 17 )
+script = ExtResource( 2 )
+
+[node name="HoloTable" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -16.1268, -8.07594, 4.29408 )
+mesh = SubResource( 22 )
+
+[node name="HoloScreen" type="MeshInstance" parent="HoloTable"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.01, 0 )
+mesh = SubResource( 24 )
+
+[node name="Hologram" type="MeshInstance" parent="HoloTable/HoloScreen"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0 )
+mesh = SubResource( 28 )
+script = ExtResource( 2 )
+
+[node name="OmniLight2" type="OmniLight" parent="HoloTable"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.295449, 1.24555, -0.51586 )
+light_color = Color( 0.819608, 0.964706, 1, 1 )
+light_energy = 0.2
+omni_range = 25.0
+
+[node name="StaticBody" type="StaticBody" parent="HoloTable"]
+
+[node name="CollisionShape" type="CollisionShape" parent="HoloTable/StaticBody"]
+shape = SubResource( 40 )
+
+[node name="Blockspace" type="Sprite3D" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 114.297, 0, 0 )
+
+[node name="Viewport" type="Viewport" parent="Blockspace"]
+size = Vector2( 1000, 1000 )
+
+[node name="Blockspace" parent="Blockspace/Viewport" instance=ExtResource( 7 )]
+
+[node name="Router" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 39.132, 4.75693, 0 )
+mesh = SubResource( 37 )
+
+[node name="Screen" type="MeshInstance" parent="Router"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -1.01102, 0, 0 )
+mesh = SubResource( 39 )
+
+[node name="Logo" type="Sprite3D" parent="Router/Screen"]
+transform = Transform( 2, 0, 0, 0, 2, 0, 0, 0, 1, 2.78419e-10, 0, 0.00637054 )
+texture = ExtResource( 6 )
+script = ExtResource( 8 )
+
+[node name="OmniLight" type="OmniLight" parent="Router/Screen"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0596166, -0.0267634, 0.45293 )
+light_color = Color( 0, 0.180392, 1, 1 )
+light_energy = 0.01
+omni_range = 6.48755
+
+[node name="MusicPlayer" parent="." instance=ExtResource( 9 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2.97031, -7.98342, 17.7813 )
