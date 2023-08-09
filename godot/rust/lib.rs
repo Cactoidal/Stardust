@@ -1,11 +1,12 @@
 use gdnative::{prelude::*, core_types::ToVariant};
 use ethers::{core::{abi::{struct_def::StructFieldType, AbiEncode}, types::*}, utils::*, signers::*, providers::*, prelude::SignerMiddleware};
-use ethers_contract::{abigen};
+use ethers_contract::{abigen, core::k256::sha2::Sha256};
 use std::{convert::TryFrom, sync::Arc};
 use tokio::runtime::{Builder, Runtime};
 use futures::Future;
 use tokio::macros::support::{Pin, Poll};
 use serde_json::json;
+use openssl::{sha::sha256};
 
 thread_local! {
     static EXECUTOR: &'static SharedLocalPool = {
@@ -296,6 +297,26 @@ unsafe {
 
 NewFuture(Ok(()))
 
+}
+
+
+#[method]
+fn get_abi_encode(encode: GodotString) -> Variant {
+
+    let encode_string: &str = &encode.to_string();
+
+    let encoded = ethers::abi::AbiEncode::encode(encode_string);
+
+
+    let mut sha =  openssl::sha::Sha256::new();
+
+    sha.update(&encoded);
+
+    let hashed = sha.finish();
+
+    let hash_string = format!("{:?}", hex::encode(hashed)).to_variant();
+
+    return hash_string;
 }
 
 
