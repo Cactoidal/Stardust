@@ -5,8 +5,8 @@ var pilot
 
 var create_player_pilot = false
 
-var current_chain = get_chain_info("Fuji")
-var destination_chain = get_chain_info("Optimism")
+var current_chain = "Fuji"
+var destination_chain = "Optimism"
 
 var chain_selector = 0
 var available_chains = ["Optimism", "Arbitrum", "Sepolia", "Mumbai", "Fuji"]
@@ -15,7 +15,7 @@ var fuji_rpc = "https://avalanche-fuji-c-chain.publicnode.com"
 var mumbai_rpc = "https://rpc-mumbai.maticvigil.com"
 var sepolia_rpc = "https://endpoints.omniatech.io/v1/eth/sepolia/public"
 var optimism_rpc = "https://optimism-goerli.publicnode.com"
-var arbitrum_rpc = "https://arbitrum-goerli.publicnode.com"
+var arbitrum_rpc = "https://endpoints.omniatech.io/v1/arbitrum/goerli/public"
 
 var balance_selector = 0
 var fuji_balance = 0
@@ -69,13 +69,13 @@ var sepolia_color = [1.0, 1.0, 0.68]
 
 var launch_console
 var blockspace
-var loading_indicator
 
 var entering_port_timer = -1
 var entering_port = false
 
 var start_in_warp = false
 var route_logo
+var reticle
 
 func get_chain_info(var chain):
 	match chain:
@@ -108,8 +108,8 @@ func _process(delta):
 		launch_console.get_node("Timer").text = String(flight_timer)
 		if flight_timer <= 0:
 			flight_timer = 0
-			# if check_pilot() == true:
-			complete_flight()
+			if check_pilot() == true:
+				complete_flight()
 
 
 func check_pilot():
@@ -122,10 +122,10 @@ func check_pilot():
 		var chain = get_chain_info(lookup)
 		Ccip.pilot_info(content, chain["chain_id"], chain["stardust_contract"], chain["rpc"], user_address, self)
 		if parse_json(pilot).onChain == true:
-			current_chain = get_chain_info(chain["name"])
+			current_chain = lookup
 			located = true
 			available_chains.erase(lookup)
-			destination_chain = get_chain_info(available_chains[0])
+			destination_chain = available_chains[0]
 			chain_selector = 0
 			entering_port_timer = -1
 			entering_port = false
@@ -146,11 +146,11 @@ func complete_flight():
 	blockspace.arriving = true
 	blockspace.color_time = 3
 	in_flight = false
-	destination_chain = get_chain_info(available_chains[0])
+	destination_chain = available_chains[0]
 	chain_selector = 0
-	launch_console.get_node("Destination").texture = destination_chain["logo"]
+	launch_console.get_node("Destination").texture = get_chain_info(destination_chain)["logo"]
 	launch_console.get_node("LAUNCH").text = "LAUNCH"
-	if destination_chain["player_balance"] == 0:
+	if get_chain_info(destination_chain)["player_balance"] == 0:
 		launch_console.get_node("Timer").text = "NO GAS THERE"
 	else:
 		launch_console.get_node("Timer").visible = false
