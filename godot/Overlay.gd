@@ -15,15 +15,17 @@ func _ready():
 	$Log/Start.connect("pressed", self, "start_game")
 	$Log/Refresh.connect("pressed", self, "get_balance")
 	$PilotMaker/Create.connect("pressed", self, "create_pilot")
+	$PilotMaker/Advanced.connect("pressed", self, "open_config")
 	
 	$Log/Copy.connect("pressed",self,"copy_address")
 	$Log/Advanced.connect("pressed", self, "open_config")
-	$Log/Config/Arbitrum/RPC.text = Global.arbitrum_rpc
-	$Log/Config/Mumbai/RPC.text = Global.mumbai_rpc
-	$Log/Config/Optimism/RPC.text = Global.optimism_rpc
-	$Log/Config/Sepolia/RPC.text = Global.sepolia_rpc
-	$Log/Config/Fuji/RPC.text = Global.fuji_rpc
-	$Log/Config/Save.connect("pressed", self, "save_rpc_settings")
+	$Config/Arbitrum/RPC.text = Global.arbitrum_rpc
+	$Config/Mumbai/RPC.text = Global.mumbai_rpc
+	$Config/Optimism/RPC.text = Global.optimism_rpc
+	$Config/Sepolia/RPC.text = Global.sepolia_rpc
+	$Config/Fuji/RPC.text = Global.fuji_rpc
+	$Config/Save.connect("pressed", self, "save_rpc_settings")
+	
 	
 	$Log/Arbitrum.connect("pressed", self, "open_faucet",[Global.arbitrum_faucet])
 	$Log/Optimism.connect("pressed", self, "open_faucet",[Global.optimism_faucet])
@@ -56,8 +58,8 @@ func set_balance(var chain_balance):
 		0: Global.fuji_balance = float(chain_balance) / float(1e18)
 		1: Global.mumbai_balance = float(chain_balance) / float (1e18)
 		2: Global.sepolia_balance = float(chain_balance) / float(1e18)
-		3: Global.arbitrum_balance = float(chain_balance) / float(1e18)
-		4: Global.optimism_balance = float(chain_balance) / float(1e18)
+		3: Global.optimism_balance = float(chain_balance) / float(1e18)
+		4: Global.arbitrum_balance = float(chain_balance) / float(1e18)
 	Global.balance_selector += 1
 	if Global.balance_selector > 4:
 		Global.balance_selector = 0
@@ -79,15 +81,15 @@ func open_faucet(var url):
 	OS.shell_open(url)
 
 func open_config():
-	$Log/Config.visible = true
+	$Config.visible = true
 	
 func save_rpc_settings():
-	Global.arbitrum_rpc = $Log/Config/Arbitrum/RPC.text
-	Global.mumbai_rpc = $Log/Config/Mumbai/RPC.text
-	Global.optimism_rpc = $Log/Config/Optimism/RPC.text
-	Global.sepolia_rpc = $Log/Config/Sepolia/RPC.text
-	Global.fuji_rpc = $Log/Config/Fuji/RPC.text
-	$Log/Config.visible = false
+	Global.arbitrum_rpc = $Config/Arbitrum/RPC.text
+	Global.mumbai_rpc = $Config/Mumbai/RPC.text
+	Global.optimism_rpc = $Config/Optimism/RPC.text
+	Global.sepolia_rpc = $Config/Sepolia/RPC.text
+	Global.fuji_rpc = $Config/Fuji/RPC.text
+	$Config.visible = false
 	
 
 var gas_ok = false
@@ -103,11 +105,12 @@ func check_pilot():
 		var chain = Global.get_chain_info(lookup)
 		Ccip.pilot_info(content, chain["chain_id"], chain["stardust_contract"], chain["rpc"], Global.user_address, self)
 		if parse_json(Global.pilot).onChain == true:
-			Global.current_chain = Global.get_chain_info(chain["name"])
+			print(lookup)
+			Global.current_chain = lookup
 			located = true
 			gas_ok = true
 			Global.available_chains.erase(lookup)
-			Global.destination_chain = Global.get_chain_info(Global.available_chains[0])
+			Global.destination_chain = Global.available_chains[0]
 			Global.chain_selector = 0
 			#set location indicators inside ship
 		
@@ -119,9 +122,12 @@ func check_pilot():
 			var enabled_chains = 0
 			for another_lookup in ["Optimism", "Arbitrum", "Sepolia", "Fuji", "Mumbai"]:
 				if Global.get_chain_info(another_lookup)["player_balance"] > 0:
-					Global.current_chain = Global.get_chain_info(another_lookup)
+					Global.current_chain = another_lookup
 					enabled_chains += 1
 			if enabled_chains >= 2:
+				Global.available_chains.erase(Global.current_chain)
+				Global.destination_chain = Global.available_chains[0]
+				Global.chain_selector = 0
 				Global.create_player_pilot = true
 				gas_ok = true
 					
@@ -138,7 +144,7 @@ func get_departure_time():
 	var content = file.get_buffer(32)
 	for lookup in ["Optimism", "Arbitrum", "Sepolia", "Fuji", "Mumbai"]:
 		var chain = Global.get_chain_info(lookup)
-		chain_check = Global.get_chain_info(lookup)
+		chain_check = lookup
 		Ccip.get_departure(content, chain["chain_id"], chain["stardust_contract"], chain["rpc"], Global.user_address, self)
 	file.close()
 	
@@ -166,6 +172,7 @@ func start_game():
 	if Global.create_player_pilot == true:
 		$Log.visible = false
 		$PilotMaker.visible = true
+		$PilotMaker/Origin.text = "Origin Chain: " + Global.current_chain
 	else:
 		if gas_ok == true:
 			var into_ship = ship_interior.instance()
@@ -176,7 +183,7 @@ func start_game():
 			Global.start_in_warp = true
 			Global.entering_port = true
 			Global.entering_port_timer = -0.1
-			Global.destination_chain = Global.get_chain_info(Global.available_chains[0])
+			Global.destination_chain = Global.available_chains[0]
 			var into_ship = ship_interior.instance()
 			get_parent().get_parent().add_child(into_ship)
 			get_parent().queue_free()
@@ -188,11 +195,14 @@ func create_pilot():
 		var file = File.new()
 		file.open("user://keystore", File.READ)
 		var content = file.get_buffer(32)
-		Ccip.create_pilot(content, Global.current_chain["chain_id"], Global.current_chain["stardust_contract"], Global.current_chain["rpc"], $PilotMaker/Name.text)
+		var success = Ccip.create_pilot(content, Global.get_chain_info(Global.current_chain)["chain_id"], Global.get_chain_info(Global.current_chain)["stardust_contract"], Global.get_chain_info(Global.current_chain)["rpc"], $PilotMaker/Name.text)
 		file.close()
-		var into_ship = ship_interior.instance()
-		get_parent().get_parent().add_child(into_ship)
-		get_parent().queue_free()
+		if success:
+			var into_ship = ship_interior.instance()
+			get_parent().get_parent().add_child(into_ship)
+			get_parent().queue_free()
+		else:
+			$PilotMaker/Create.text = "TX ERROR"
 			
 
 
