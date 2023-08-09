@@ -10,6 +10,3 @@ func _ready():
 		$Timer.text = "NO GAS THERE"
 		$Timer.visible = true
 
-
-func set_pilot():
-	pass
