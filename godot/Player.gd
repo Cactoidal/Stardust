@@ -28,6 +28,7 @@ var menu
 func _ready():
 	#hides the cursor
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	Global.reticle = $Reticle/Target
 	
 func _input(event):
 	#get mouse input for camera rotation
