@@ -1,3 +1,5 @@
+Note that libstardust_rust.dylib (the compiled Rust library) was too big to upload uncompressed and will need to be unzipped for use.  Or you can compile the library yourself using the files in the rust folder.
+
 CREDITS:
 
 + [Godot](https://github.com/godotengine/godot)
