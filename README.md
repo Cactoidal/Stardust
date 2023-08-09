@@ -1,7 +1,7 @@
 # Stardust
 Eth Global Superhack 2023
 
-[Try the latest version: Stardust v1 Prerelease!](https://github.com/Cactoidal/Stardust/releases)
+[Try the latest version: Stardust v1 Pre-release!](https://github.com/Cactoidal/Stardust/releases)
 
 [Check out my devblog here](https://github.com/Cactoidal/Stardust/tree/main/contracts)
 
