@@ -1,7 +1,7 @@
 # Stardust
 Eth Global Superhack 2023
 
-Space commerce game using Chainlink CCIP to transport ships from one blockchain to another.
+Cross-chain space commerce game using Chainlink CCIP to transport ships from one blockchain to another.
 
 [Try the latest version: Stardust v1 Pre-release!](https://github.com/Cactoidal/Stardust/releases)
 
