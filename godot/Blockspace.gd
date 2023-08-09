@@ -12,7 +12,7 @@ func _ready():
 	if Global.start_in_warp == true:
 		current_color = warp_color.duplicate()
 	else:
-		current_color = Global.current_chain["color"].duplicate()
+		current_color = Global.get_chain_info(Global.current_chain)["color"]
 	$WorldEnvironment.get_environment().background_color = Color(current_color[0],current_color[1],current_color[2],1.0)
 	
 func enter_warp(delta):
@@ -25,9 +25,9 @@ func enter_warp(delta):
 
 func arrive(delta):
 	for tone in range(3):
-		if current_color[tone] < Global.current_chain["color"][tone]:
+		if current_color[tone] < Global.get_chain_info(Global.current_chain)["color"][tone]:
 			current_color[tone] += delta
-		if current_color[tone] > Global.current_chain["color"][tone]:
+		if current_color[tone] > Global.get_chain_info(Global.current_chain)[tone]:
 			current_color[tone] -= delta
 	$WorldEnvironment.get_environment().background_color = Color(current_color[0],current_color[1],current_color[2],1)
 
