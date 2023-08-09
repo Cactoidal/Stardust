@@ -10,6 +10,8 @@ CREDITS:
 
 + [Kevin MacLeod - "Eternity"](https://www.youtube.com/watch?v=py3IoOIQKXM&t=1s)
 
++ [FPS Controller](https://github.com/GarbajYT/godot_updated_fps_controller)
+
 + [Metal Shader](https://godotshaders.com/shader/simple-3d-metal/)
 
 + [Cheap Water Shader](https://godotshaders.com/shader/cheap-water-shader/)
