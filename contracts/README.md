@@ -155,7 +155,7 @@ I still have time to add more features, which I'll write about later, but this r
 
 I'll be exporting for Mac Silicon, and potentially Linux.  Games using Godot Rust can absolutely work on different platforms, not just Mac.  But there's a catch: the Rust library needs to be compiled for the target system.  The easiest way to do this is by compiling in the target environment, which I will try to do if time allows.
 
-While I'm on the subject, I wanted to mention a couple other caveats: Godot Rust is definitely capable of running on the newest version of Godot, 4.1, as the maintainers have worked hard to update it for the new GDExtension system, and that's something I want to look into later, since it should make everything run even better than it does now.
+While I'm on the subject, I wanted to mention a couple other caveats: Godot Rust is definitely capable of running on the newest stable version of Godot (4.1) as the maintainers have worked hard to update it for the new GDExtension system, and that's something I want to look into later, since it should make everything run even better than it does now.
 
 And a note about the code: while playing, you will notice that transactions and blockchain-reads will briefly lag the rest of the game, as Ethers-rs awaits a response from RPC nodes.  I would imagine there is some way to run Rust code on its own thread separate from the game's main thread, but I'm not quite sure how to do it.
 
