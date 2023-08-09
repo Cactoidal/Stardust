@@ -45,9 +45,8 @@ contract NewPilot is CCIPReceiver, Ownable {
         string name;
         address id;
         uint level;
-        uint shipSize;
-        uint cargoType;
-        uint cargoAmount;
+        uint holdSize;
+        bytes cargo;
         uint coinBalance;
         uint job;
         bool antimatterModule;
@@ -57,8 +56,19 @@ contract NewPilot is CCIPReceiver, Ownable {
     }
 
     mapping(address => Pilot) public pilots;
-    mapping(address => uint) public lastDeparted;
+    mapping(address => Departure) lastDeparted;
     mapping(address => uint) public lastArrived;
+
+    struct Departure {
+        address pilot;
+        uint destinationSelector;
+        uint departureTime;
+    }
+
+    mapping (uint => Departure[]) epochs;
+    uint public currentEpoch = 1;
+    uint public epochTime;
+    
 
     //  PILOT  //
 
@@ -69,20 +79,25 @@ contract NewPilot is CCIPReceiver, Ownable {
         newPilot.name = _name;
         newPilot.id = msg.sender;
         newPilot.level = 1;
-        newPilot.shipSize = 100;
+        newPilot.holdSize = 100;
+        newPilot.coinBalance = 50;
         newPilot.onChain = true;
         pilots[msg.sender] = newPilot;
     }
 
-function _ccipSend(
+    //_cargo is a hash created from the cargo manifest
+    function _ccipSend(
         uint64 destinationChainSelector,
         address receiver,
-        PayFeesIn payFeesIn
+        PayFeesIn payFeesIn,
+        bytes memory _cargo
     ) public onlyWhitelistedDestinationChain(destinationChainSelector) {
 
         require(pilots[msg.sender].onChain == true);
+        require(  keccak256(abi.encode(pilots[msg.sender].cargo)) == keccak256(abi.encode(""))  );
         pilots[msg.sender].onChain = false;
-        lastDeparted[msg.sender] = block.timestamp;
+        pilots[msg.sender].cargo = _cargo;
+        recordDeparture(msg.sender, destinationChainSelector);
 
         Client.EVM2AnyMessage memory message = Client.EVM2AnyMessage({
             receiver: abi.encode(receiver),
@@ -116,6 +131,18 @@ function _ccipSend(
         emit MessageSent(messageId);
     }
 
+    function recordDeparture(address _pilot, uint _destination) internal {
+        if (block.timestamp > epochTime + 1800) {
+            epochTime = block.timestamp;
+            currentEpoch += 1;
+        }
+        Departure memory newDeparture;
+        newDeparture.pilot = _pilot;
+        newDeparture.destinationSelector = _destination;
+        newDeparture.departureTime = block.timestamp;
+        epochs[currentEpoch].push(newDeparture);
+    }
+
 
      function _ccipReceive(
         Client.Any2EVMMessage memory message
@@ -131,10 +158,95 @@ function _ccipSend(
     }
 
 
-
     function pilotInfo(address _id) public view returns (Pilot memory) {
         return pilots[_id];
     }
+
+
+    //   CARGO   //
+
+    mapping (address => address) claimantsAgainst;
+    mapping (address => uint) claimantDeposits;
+    mapping (address => uint) claimantRewards;
+
+    function makeClaim(address _pilot) public {
+        if (claimantDeposits[msg.sender] == 0) {
+            require(pilots[msg.sender].coinBalance >= 100);
+            pilots[msg.sender].coinBalance -= 100;
+            claimantDeposits[msg.sender] += 100;
+        }
+        claimantsAgainst[_pilot] = msg.sender; 
+    }
+
+    function declareCargo(string calldata amount1, string calldata amount2, string calldata amount3, string calldata salt) public {
+        //prepare for hashing
+        string memory combined = amount1;
+        combined = string.concat(combined, amount2);
+        combined = string.concat(combined, amount3);
+        combined = string.concat(combined, salt);
+        // validate manifest contents
+        require(keccak256(pilots[msg.sender].cargo) == keccak256(  abi.encode(sha256(abi.encode(combined)))   ));
+        // validate cargo size
+        uint converted_amount1 = strToUint(amount1);
+        uint converted_amount2 = strToUint(amount2);
+        uint converted_amount3 = strToUint(amount3);
+        require(converted_amount1 + converted_amount2 + converted_amount3 <= pilots[msg.sender].holdSize);
+        //validate cargo cost
+        uint cost = (5 * converted_amount2) + (10 * converted_amount3);
+        require(cost <= pilots[msg.sender].coinBalance);
+        pilots[msg.sender].coinBalance -= cost;
+        //check if caught and distribute rewards
+        bool caught;
+        if (claimantsAgainst[msg.sender] != address(0x0)) {
+            if (converted_amount3 > 0) {
+                caught = true;
+                claimantRewards[claimantsAgainst[msg.sender]] += cost / 10;
+            }
+            else {
+                pilots[msg.sender].coinBalance += claimantDeposits[claimantsAgainst[msg.sender]];
+                claimantDeposits[claimantsAgainst[msg.sender]] = 0;
+            }
+            claimantsAgainst[msg.sender] = address(0x0);
+        }
+
+        if (caught == false) {
+            uint revenue = (converted_amount1 * 2) + (converted_amount2 * 12) + (converted_amount3 * 22);
+            pilots[msg.sender].coinBalance += revenue;
+        }
+        
+        pilots[msg.sender].cargo = "";
+
+    }
+
+    //credit: stackoverflow
+    function strToUint(string memory _str) public pure returns(uint256 result) {
+    
+    for (uint256 i = 0; i < bytes(_str).length; i++) {
+        if ((uint8(bytes(_str)[i]) - 48) < 0 || (uint8(bytes(_str)[i]) - 48) > 9) {
+            return 0;
+        }
+        result += (uint8(bytes(_str)[i]) - 48) * 10**(bytes(_str).length - i - 1);
+    }
+    
+    return result;
+}
+
+
+    function takeReward() public {
+        pilots[msg.sender].coinBalance += claimantRewards[msg.sender];
+        claimantRewards[msg.sender] = 0;
+    }
+
+     function getOutgoingPilots() public view returns (Departure[] memory) {
+        return epochs[currentEpoch];
+    }
+    
+    function getOutgoingPilots2() public view returns (Departure[] memory) {
+        return epochs[currentEpoch - 1];
+    }
+
+
+
 
     // ACCESS CONTROL // 
 
