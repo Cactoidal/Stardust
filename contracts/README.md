@@ -176,7 +176,7 @@ There are three types of cargo:
 
 Each type of cargo takes up 1 unit of space in your ship's cargo hold, so it's up to you which combination of goods you want to take.  But here's where things get tricky:  if you decide to risk it and carry Contraband, you stand to gain a handsome reward should you go undetected.  But players on your destination chain can see you coming, and if they wish, they can choose to put up some collateral and put down a Contraband claim on your cargo.  
 
-When you land and try to sell, if you have Contraband in your hold and someone has put down a claim, not only will you lose all your cargo AND the money you spent to buy it, but they will receive a small reward - 1/10 of the money you lost.
+When you land and try to sell, if you have Contraband in your hold and someone has put down a claim, not only will you lose all your cargo AND the money you spent to buy it, but they will receive a small reward: 1/10 of the money you lost.
 
 However, if they were wrong, and your cargo was clean, they lose their collateral deposit, and you take it as an extra reward.
 
