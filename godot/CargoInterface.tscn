@@ -1,0 +1,109 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://CargoInterface.gd" type="Script" id=1]
+
+[node name="CargoInterface" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+
+[node name="Anodyne" type="Label" parent="."]
+margin_left = 22.0
+margin_top = 17.0
+margin_right = 78.0
+margin_bottom = 31.0
+rect_scale = Vector2( 1.5, 1.5 )
+text = "Anodyne"
+
+[node name="AnodyneBox" type="ColorRect" parent="."]
+margin_left = 40.0
+margin_top = 43.0
+margin_right = 80.0
+margin_bottom = 83.0
+color = Color( 0, 0, 0, 1 )
+
+[node name="AnodyneAmount" type="Label" parent="."]
+margin_left = 48.0
+margin_top = 45.0
+margin_right = 59.0
+margin_bottom = 59.0
+rect_scale = Vector2( 3, 3 )
+text = "0"
+
+[node name="Tech" type="Label" parent="."]
+margin_left = 179.0
+margin_top = 17.0
+margin_right = 235.0
+margin_bottom = 31.0
+rect_scale = Vector2( 1.5, 1.5 )
+text = "Tech"
+
+[node name="TechBox" type="ColorRect" parent="."]
+margin_left = 183.0
+margin_top = 43.0
+margin_right = 223.0
+margin_bottom = 83.0
+color = Color( 0, 0, 0, 1 )
+
+[node name="TechAmount" type="Label" parent="."]
+margin_left = 191.0
+margin_top = 45.0
+margin_right = 202.0
+margin_bottom = 59.0
+rect_scale = Vector2( 3, 3 )
+text = "0"
+
+[node name="Contraband" type="Label" parent="."]
+margin_left = 293.0
+margin_top = 17.0
+margin_right = 365.0
+margin_bottom = 31.0
+rect_scale = Vector2( 1.5, 1.5 )
+text = "Contraband"
+
+[node name="ContrabandBox" type="ColorRect" parent="."]
+margin_left = 325.0
+margin_top = 44.0
+margin_right = 365.0
+margin_bottom = 84.0
+color = Color( 0, 0, 0, 1 )
+
+[node name="ContrabandAmount" type="Label" parent="."]
+margin_left = 333.0
+margin_top = 45.0
+margin_right = 343.0
+margin_bottom = 59.0
+rect_scale = Vector2( 3, 3 )
+text = "0"
+
+[node name="HoldUsed" type="Label" parent="."]
+margin_left = 7.0
+margin_top = 100.0
+margin_right = 74.0
+margin_bottom = 114.0
+rect_scale = Vector2( 1.3, 1.3 )
+text = "Hold Used"
+
+[node name="Amount" type="Label" parent="HoldUsed"]
+margin_left = 16.0
+margin_top = 19.0
+margin_right = 56.0
+margin_bottom = 33.0
+rect_scale = Vector2( 1.3, 1.3 )
+text = "0 / 0"
+
+[node name="MoneySpent" type="Label" parent="."]
+margin_left = 312.0
+margin_top = 100.0
+margin_right = 395.0
+margin_bottom = 114.0
+rect_scale = Vector2( 1.3, 1.3 )
+text = "Money Spent"
+
+[node name="Amount" type="Label" parent="MoneySpent"]
+margin_left = 16.0
+margin_top = 19.0
+margin_right = 56.0
+margin_bottom = 33.0
+rect_scale = Vector2( 1.3, 1.3 )
+text = "0 / 0"
