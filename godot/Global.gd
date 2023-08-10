@@ -30,11 +30,20 @@ var sepolia_faucet = "https://sepolia-faucet.pk910.de"
 var optimism_faucet = "https://app.optimism.io/faucet"
 var arbitrum_faucet = "https://faucet.quicknode.com/arbitrum/goerli"
 
-var fuji_stardust = "0x091ec5F9c7d12DfCa9468f662e2f395Cb9656c75"
-var mumbai_stardust = "0xF0c3F3Ef23ACF07764e42342e85eE248A9bEd081"
+
+var fuji_stardust = "0x9F20F2CdE8b064D969E0ea2EcaC106180079E185"
+var mumbai_stardust = "0xc3676cCa77a0205811FAcEACa5EA6b7d3eB69b32"
+
+#not deployed yet
 var sepolia_stardust = "0x822D1FcC6544Ec59dce2A68A4c6507a3D099496b"
 var optimism_stardust = "0x78FE5243cf6143d98C8b5847c8E1b15Cf53D8338"
 var arbitrum_stardust = "0x78FE5243cf6143d98C8b5847c8E1b15Cf53D8338"
+
+#var fuji_stardust = "0x091ec5F9c7d12DfCa9468f662e2f395Cb9656c75"
+#var mumbai_stardust = "0xF0c3F3Ef23ACF07764e42342e85eE248A9bEd081"
+#var sepolia_stardust = "0x822D1FcC6544Ec59dce2A68A4c6507a3D099496b"
+#var optimism_stardust = "0x78FE5243cf6143d98C8b5847c8E1b15Cf53D8338"
+#var arbitrum_stardust = "0x78FE5243cf6143d98C8b5847c8E1b15Cf53D8338"
 
 var fuji_id = 43113
 var mumbai_id = 80001
@@ -68,6 +77,7 @@ var arbitrum_color = [0.18, 0.18, 0.68]
 var sepolia_color = [1.0, 1.0, 0.68]
 
 var launch_console
+var cargo_console
 var blockspace
 
 var entering_port_timer = -1
@@ -76,6 +86,8 @@ var entering_port = false
 var start_in_warp = false
 var route_logo
 var reticle
+
+var must_sell = false
 
 func get_chain_info(var chain):
 	match chain:
@@ -118,7 +130,8 @@ func check_pilot():
 	var content = file.get_buffer(32)
 	var located = false
 	
-	for lookup in ["Optimism", "Arbitrum", "Sepolia", "Fuji", "Mumbai"]:
+	for lookup in ["Fuji", "Mumbai"]:
+	#for lookup in ["Optimism", "Arbitrum", "Sepolia", "Fuji", "Mumbai"]:
 		var chain = get_chain_info(lookup)
 		Ccip.pilot_info(content, chain["chain_id"], chain["stardust_contract"], chain["rpc"], user_address, self)
 		if parse_json(pilot).onChain == true:
@@ -136,20 +149,31 @@ func check_pilot():
 		entering_port_timer = 20
 		launch_console.get_node("LAUNCH").text = "ARRIVING..."
 		return false
+	
+	file.close()
 
 #Called from Rust
 func set_pilot(var _pilot):
 	pilot = _pilot
+
+func check_cargo_sold():
+	var file = File.new()
+	file.open("user://keystore", File.READ)
+	var content = file.get_buffer(32)
+	Ccip.pilot_info(content, get_chain_info(current_chain)["chain_id"], get_chain_info(current_chain)["stardust_contract"], get_chain_info(current_chain)["rpc"], user_address, self)
+	if parse_json(pilot).cargo == "0x":
+		return true
 
 func complete_flight():
 	blockspace.warping = false
 	blockspace.arriving = true
 	blockspace.color_time = 3
 	in_flight = false
+	must_sell = true
 	destination_chain = available_chains[0]
 	chain_selector = 0
 	launch_console.get_node("Destination").texture = get_chain_info(destination_chain)["logo"]
-	launch_console.get_node("LAUNCH").text = "LAUNCH"
+	launch_console.get_node("LAUNCH").text = "SELL CARGO"
 	if get_chain_info(destination_chain)["player_balance"] == 0:
 		launch_console.get_node("Timer").text = "NO GAS THERE"
 	else:
