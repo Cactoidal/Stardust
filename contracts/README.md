@@ -194,7 +194,7 @@ The smart contract checks that your submitted values are valid.  It first concat
 
 The cost of the goods is subtracted from your balance retroactively (but you will make more in revenue than you lose from the cost of business - especially if you successfully shipped Contraband).
 
-If there's a claim on your goods, the smart contract checks to see if you had any Contraband.  You could certainly choose to NOT reveal, and not lose your money - but then your ship would be permanently bricked, because you cannot leave the chain until you claim.
+If there's a claim on your goods, the smart contract checks to see if you had any Contraband.  You could certainly choose to NOT reveal, and not lose your money - but then your ship would be permanently bricked, because you cannot leave the chain until you reveal.
 
 ![commit-reveal](https://github.com/Cactoidal/Stardust/assets/115384394/4279c398-a18d-4429-bedf-deb258595423)
 
