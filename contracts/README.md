@@ -220,4 +220,16 @@ When Godot needs to see if any ships are en-route from a chain, it will look at 
 
 Those arrays contain Departure structs with the pilot's departure timestamp inside, which Godot can then compare to the pilot's most recent arrival time on the destination chain.  If the departure time is greater than the arrival time, we know the ship is still in transit.
 
+I also realized that I need to impose a further requirement for the structure of the hash.  If I allow players to concatenate multi-digit numbers, it would be possible to structure your values to protect yourself in the event your Contraband is detected.
+
+For instance, let's say my real values were 9, 8, and 10.  When I arrive at my destination, I see that someone has dastardly put a claim on my cargo.  Instead of supplying the real values, I could state that I was actually carrying 9, 81, and 0 (or 98, 1, and 0), and dodge the claim because my hash would evaluate as valid.
+
+Of course, I wouldn't code the game to allow this kind of cheating, but someone playing directly through the contract (or with a modified game) could do it easily.  One option would be to enforce single-digit limits for each amount.  This however places a cap on the maximum size of the ship, which isn't really desirable.
+
+I haven't gone over the idea too thoroughly yet, but alternatively I could require padding of digits with a 0 in the front.  Our above example becomes 09 08 010, which seems impossible to spoof; the player can't claim a different valid combination that would avoid detection of Contraband.  But let's say that cargo holds become quite large, and someone attempts to bridge 01 01 010000.  Our smuggler could feign innocence with a claim of 01 010100 00. 
+
+Therefore, the amount of padding necessary for security depends on the maximum size of the hold.  Five zeroes applied to the latter example:  0000001 0000001 00000010000.  Our would-be spoofer tries to claim 0000001 00000010000001 0000, but the leftover 0000 just isn't long enough to be a valid amount (and moreover, 10000001 would require a massive cargo hold, almost certainly much bigger than what the player has).
+
+Padding seems to be the way to go.  Since this demo is capped at a holdSize of 100, I won't go overboard with the zeroes, but a more secure system will need to take into acccount how big ships are expect to become.  Or just pick an improbably large number of zeroes from the get-go.
+
 
