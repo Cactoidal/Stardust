@@ -242,4 +242,6 @@ I find there are certain moments in programming that feel miraculous, like when 
 
 Now, if only I could make blockspace reliably turn the proper color upon arrival...
 
+The next step will be implementing a demo of the claiming mechanic.  To make it easier to demonstrate, I won't be requiring a deposit from the claimant, but in the actual game, a player would essentially need to buy a claim by putting up some amount of game currency as collateral.
+
 
