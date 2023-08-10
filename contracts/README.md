@@ -196,7 +196,7 @@ The cost of the goods is subtracted from your balance retroactively (but you wil
 
 If there's a claim on your goods, the smart contract checks to see if you had any Contraband.  You could certainly choose to NOT reveal - but then your ship and your money would be permanently bricked, because you can neither leave the chain nor spend your money until you reveal.
 
-![commit-reveal](https://github.com/Cactoidal/Stardust/assets/115384394/4279c398-a18d-4429-bedf-deb258595423)
+![commit-reveal](https://github.com/Cactoidal/Stardust/assets/115384394/e0a15791-8cc0-4f58-8975-7e2df01f10d9)
 
 When I say "money", of course, I'm referring to game tokens, which are to be had in abundance, and it's not the end of the world if you happen to get caught.  But as ship sizes get larger and the allure of massive Contraband payouts tantalize players, the risk of putting down claims on big ships could pay off in a big way.
 
@@ -231,5 +231,7 @@ I haven't gone over the idea too thoroughly yet, but alternatively I could requi
 Therefore, the amount of padding necessary for security depends on the maximum size of the hold.  Five zeroes applied to the latter example:  0000001 0000001 00000010000.  Our would-be spoofer tries to claim 0000001 00000010000001 0000, but the leftover 0000 just isn't long enough to be a valid amount (and moreover, 10000001 would require a massive cargo hold, almost certainly much bigger than what the player has).
 
 Padding seems to be the way to go.  Since this demo is capped at a holdSize of 100, I won't go overboard with the zeroes, but a more secure system will need to take into acccount how big ships are expect to become.  Or just pick an improbably large number of zeroes from the get-go.
+
+I've edited my diagram above to account for this change, and I also moved the salt from the back of the string to the front.
 
 
