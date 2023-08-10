@@ -281,6 +281,11 @@
 		"inputs": [
 			{
 				"internalType": "string",
+				"name": "salt",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
 				"name": "amount1",
 				"type": "string"
 			},
@@ -292,11 +297,6 @@
 			{
 				"internalType": "string",
 				"name": "amount3",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "salt",
 				"type": "string"
 			}
 		],
