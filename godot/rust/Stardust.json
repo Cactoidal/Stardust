@@ -149,6 +149,11 @@
 				"internalType": "enum NewPilot.PayFeesIn",
 				"name": "payFeesIn",
 				"type": "uint8"
+			},
+			{
+				"internalType": "bytes",
+				"name": "_cargo",
+				"type": "bytes"
 			}
 		],
 		"name": "_ccipSend",
@@ -211,12 +216,91 @@
 	{
 		"inputs": [
 			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "claimantRewards",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "claimantsAgainst",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
 				"internalType": "string",
 				"name": "_name",
 				"type": "string"
 			}
 		],
 		"name": "createPilot",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "currentEpoch",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "amount1",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "amount2",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "amount3",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "salt",
+				"type": "string"
+			}
+		],
+		"name": "declareCargo",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -262,6 +346,79 @@
 	},
 	{
 		"inputs": [],
+		"name": "epochTime",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getOutgoingPilots",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "pilot",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "destinationSelector",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "departureTime",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct NewPilot.Departure[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getOutgoingPilots2",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "pilot",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "destinationSelector",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "departureTime",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct NewPilot.Departure[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
 		"name": "getRouter",
 		"outputs": [
 			{
@@ -303,12 +460,35 @@
 		"name": "lastDeparted",
 		"outputs": [
 			{
+				"internalType": "address",
+				"name": "pilot",
+				"type": "address"
+			},
+			{
 				"internalType": "uint256",
-				"name": "",
+				"name": "destinationSelector",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "departureTime",
 				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_pilot",
+				"type": "address"
+			}
+		],
+		"name": "makeClaim",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -353,18 +533,13 @@
 					},
 					{
 						"internalType": "uint256",
-						"name": "shipSize",
+						"name": "holdSize",
 						"type": "uint256"
 					},
 					{
-						"internalType": "uint256",
-						"name": "cargoType",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "cargoAmount",
-						"type": "uint256"
+						"internalType": "bytes",
+						"name": "cargo",
+						"type": "bytes"
 					},
 					{
 						"internalType": "uint256",
@@ -432,18 +607,13 @@
 			},
 			{
 				"internalType": "uint256",
-				"name": "shipSize",
+				"name": "holdSize",
 				"type": "uint256"
 			},
 			{
-				"internalType": "uint256",
-				"name": "cargoType",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "cargoAmount",
-				"type": "uint256"
+				"internalType": "bytes",
+				"name": "cargo",
+				"type": "bytes"
 			},
 			{
 				"internalType": "uint256",
@@ -489,6 +659,25 @@
 	{
 		"inputs": [
 			{
+				"internalType": "string",
+				"name": "_str",
+				"type": "string"
+			}
+		],
+		"name": "strToUint",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "result",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "pure",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
 				"internalType": "bytes4",
 				"name": "interfaceId",
 				"type": "bytes4"
@@ -503,6 +692,13 @@
 			}
 		],
 		"stateMutability": "pure",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "takeReward",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
