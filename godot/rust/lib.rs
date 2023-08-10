@@ -337,13 +337,13 @@ unsafe {
     node.call("set_departure_time", &[query])
 };
 
+
 NewFuture(Ok(()))
 
 }
 
 
 
-// needs revamp
 #[method]
 #[tokio::main]
 async fn get_departure_epoch(key: PoolArray<u8>, chain_id: u64, stardust_address: GodotString, rpc: GodotString, ui_node: Ref<Control>) -> NewFuture {
@@ -365,18 +365,18 @@ let client = SignerMiddleware::new(provider, wallet);
 
 let contract = Stardust::new(contract_address.clone(), Arc::new(client.clone()));
 
-let epoch1 = contract.current_epoch().call().await.unwrap();
+let epoch1 = contract.get_outgoing_pilots().call().await.unwrap();
 
-let epoch2 = &epoch1 - 1;
+let query: Variant = format!{"{:?}", epoch1}.to_variant();
 
-let array1 = contract.epochs(U256::from(epoch1), U256::from(epoch2)).call().await.unwrap();
+let epoch2 = contract.get_outgoing_pilots_2().call().await.unwrap();
 
-let query: Variant = format!{"{:?}", array1}.to_variant();
+let query2: Variant = format!{"{:?}", epoch2}.to_variant();
 
 let node: TRef<Control> = unsafe { ui_node.assume_safe() };
 
 unsafe {
-    node.call("set_incoming_ships", &[query])
+    node.call("set_incoming_ships", &[query, query2])
 };
 
 NewFuture(Ok(()))
