@@ -234,4 +234,8 @@ Padding seems to be the way to go.  Since this demo is capped at a holdSize of 1
 
 I've edited my diagram above to account for this change, and I also moved the salt from the back of the string to the front.
 
+A moment to enjoy the cargo console in the cool purple light of Polygon blockspace:
+
+https://github.com/Cactoidal/Stardust/assets/115384394/c80441d5-df7f-4104-ae2e-5999b6507ac2
+
 
