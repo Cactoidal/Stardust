@@ -214,7 +214,7 @@ I thought I would write a little about how I plan to prevent state bloat from ca
 
 One way to solve this would be with an indexer that is looking for these events, and then loads them into a database.  Godot could then call into the database and quickly query to retrieve the data.  But it's also possible to organize the data on-chain so Godot can query only slices of the departure record at a time.
 
-This is possible by organizing time into epochs.  The "epoch time" is refreshed if someone departs the chain at least 1800 seconds after the previous epoch time was set.  This will also increment the "current epoch" value.  When someone leaves during an epoch, their departure is recorded and pushed to an array mapped to the current epoch number.
+This is possible by organizing time into epochs.  The "epoch time" is refreshed if someone departs the chain at least 1800 seconds after the previous epoch time was set.  This will also increment the "current epoch" value.  Whenever someone leaves, their departure is recorded and pushed to an array mapped to the current epoch number.
 
 When Godot needs to see if any ships are en-route from a chain, it will look at the current epoch number for that chain, and then pull the array mapped to that number.  It will also pull the array for "current epoch" - 1, just to make sure nobody gets missed.
 
