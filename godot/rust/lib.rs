@@ -327,14 +327,20 @@ let client = SignerMiddleware::new(provider, wallet);
 
 let contract = Stardust::new(contract_address.clone(), Arc::new(client.clone()));
 
-let prequery = contract.last_departed(pilot).call().await.unwrap();
+let prequery = contract.get_last_departed(pilot).call().await.unwrap();
 
-let query: Variant = format!{"{:?}", prequery}.to_variant();
+let query = json!({
+    "pilot": prequery.pilot,
+    "destinationSelector": prequery.destination_selector,
+    "departureTime": prequery.departure_time,
+});
+
+//let query: Variant = format!{"{:?}", prequery}.to_variant();
 
 let node: TRef<Control> = unsafe { ui_node.assume_safe() };
 
 unsafe {
-    node.call("set_departure_time", &[query])
+    node.call("set_departure_time", &[query.to_string().to_variant()])
 };
 
 
