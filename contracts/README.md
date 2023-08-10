@@ -238,7 +238,7 @@ A moment to enjoy the cargo console in the cool purple light of Polygon blockspa
 
 https://github.com/Cactoidal/Stardust/assets/115384394/c80441d5-df7f-4104-ae2e-5999b6507ac2
 
-I find there are certain moments in programming that feel miraculous, like when my cross-chain secret-hashing contract and my space commerce game work together properly on the first deployment.  I'm very happy to report that I was able to loop back and forth between Fuji and Mumbai, selling cargo both times, which would only be possible by validating the pilot's cargo hash on the destination chain.  I thought testing this part would be a nightmare, but I guess the work I did testing the parts individually was sufficient.
+I find there are certain moments in programming that feel miraculous, like when my cross-chain secret-hashing contract and my space commerce game work together properly on the first deployment.  I'm very happy to report that I was able to loop back and forth between Fuji and Mumbai, selling cargo both times, which would only be possible by validating the pilot's cargo hash on the destination chain.  I thought testing this part would be a nightmare, but I guess the work I did testing the components individually was sufficient.
 
 Now, if only I could make blockspace reliably turn the proper color upon arrival...
 
