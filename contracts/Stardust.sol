@@ -9,7 +9,7 @@ import {IRouterClient} from "@chainlink/contracts-ccip/src/v0.8/ccip/interfaces/
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract NewPilot is CCIPReceiver, Ownable {
+contract Stardust is CCIPReceiver, Ownable {
     enum PayFeesIn {
         Native,
         LINK
@@ -79,7 +79,7 @@ contract NewPilot is CCIPReceiver, Ownable {
         newPilot.name = _name;
         newPilot.id = msg.sender;
         newPilot.level = 1;
-        newPilot.holdSize = 10;
+        newPilot.holdSize = 100;
         newPilot.coinBalance = 50;
         newPilot.onChain = true;
         pilots[msg.sender] = newPilot;
@@ -152,7 +152,7 @@ contract NewPilot is CCIPReceiver, Ownable {
     {
         Pilot memory arrivingPilot = abi.decode(message.data, (Pilot));
         arrivingPilot.onChain = true;
-        arrivingPilot.coinBalance += 100;
+        arrivingPilot.coinBalance += 10;
         pilots[arrivingPilot.id] = arrivingPilot;
         lastArrived[arrivingPilot.id] = block.timestamp;
     }
@@ -183,7 +183,7 @@ contract NewPilot is CCIPReceiver, Ownable {
         claimantsAgainst[_pilot] = msg.sender;
     }
 
-    function declareCargo(string calldata amount1, string calldata amount2, string calldata amount3, string calldata salt) public {
+    function declareCargo(string calldata salt, string calldata amount1, string calldata amount2, string calldata amount3) public {
         //prepare for hashing
         string memory combined = salt;
         combined = string.concat(combined, "00");
@@ -198,7 +198,7 @@ contract NewPilot is CCIPReceiver, Ownable {
         uint converted_amount1 = strToUint(amount1);
         uint converted_amount2 = strToUint(amount2);
         uint converted_amount3 = strToUint(amount3);
-        require(converted_amount1 + converted_amount2 + converted_amount3 <= pilots[msg.sender].holdSize);
+        require( (converted_amount1 + converted_amount2 + converted_amount3) * 10 <= pilots[msg.sender].holdSize);
         //validate cargo cost
         uint cost = (5 * converted_amount2) + (10 * converted_amount3);
         require(cost <= pilots[msg.sender].coinBalance);
