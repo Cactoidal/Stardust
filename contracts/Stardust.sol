@@ -79,7 +79,7 @@ contract NewPilot is CCIPReceiver, Ownable {
         newPilot.name = _name;
         newPilot.id = msg.sender;
         newPilot.level = 1;
-        newPilot.holdSize = 100;
+        newPilot.holdSize = 10;
         newPilot.coinBalance = 50;
         newPilot.onChain = true;
         pilots[msg.sender] = newPilot;
@@ -185,10 +185,13 @@ contract NewPilot is CCIPReceiver, Ownable {
 
     function declareCargo(string calldata amount1, string calldata amount2, string calldata amount3, string calldata salt) public {
         //prepare for hashing
-        string memory combined = amount1;
+        string memory combined = salt;
+        combined = string.concat(combined, "00");
+        combined = string.concat(combined, amount1);
+        combined = string.concat(combined, "00");
         combined = string.concat(combined, amount2);
+        combined = string.concat(combined, "00");
         combined = string.concat(combined, amount3);
-        combined = string.concat(combined, salt);
         // validate manifest contents
         require(keccak256(pilots[msg.sender].cargo) == keccak256(  abi.encode(sha256(abi.encode(combined)))   ));
         // validate cargo size
