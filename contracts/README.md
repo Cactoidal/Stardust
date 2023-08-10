@@ -201,3 +201,23 @@ If there's a claim on your goods, the smart contract checks to see if you had an
 When I say "money", of course, I'm referring to game tokens, which are to be had in abundance, and it's not the end of the world if you happen to get caught.  But as ship sizes get larger and the allure of massive Contraband payouts tantalize players, the risk of putting down claims on big ships could pay off in a big way.
 
 Anyway, this required some creative engineering, since Godot needs to create a hash that takes into account abi.encode.  Ultimately I solved this with Ethers-rs, which has an AbiEncode trait just for this purpose.  Combined with the OpenSSL crate's SHA256, Godot Rust can produce the hash no problem.   Now I just need to create the UI that puts this all together in-game.
+
+# DAY 7
+
+It's coming together:
+
+<img width="1018" alt="cargo console" src="https://github.com/Cactoidal/Stardust/assets/115384394/affd4bd4-8f9a-45db-9e20-4697fd36f133">
+
+The next part will involve a redeploy of the smart contract, then hooking it up to Godot Rust.
+
+I thought I would write a little about how I plan to prevent state bloat from causing problems when potential claimants are looking for incoming ships.  There needs to be a record of ships' departures and arrivals, so the game can check who is in transit from which chains to where.  But the game can't pull the entire record every time it wants to check; imagine if there were hundreds of players and they were frequently traveling back and forth, there would eventually be thousands upon thousands of departure and arrival events on each chain.
+
+One way to solve this would be with an indexer that is looking for these events, and then loads them into a database.  Godot could then call into the database and quickly query to retrieve the data.  But it's also possible to organize the data on-chain so Godot can query only slices of the departure record at a time.
+
+This is possible by organizing time into epochs.  The "epoch time" is refreshed if someone departs the chain at least 1800 seconds after the previous epoch time was set.  This will also increment the "current epoch" value.  When someone leaves during an epoch, their departure is recorded and pushed to an array mapped to the current epoch number.
+
+When Godot needs to see if any ships are en-route from a chain, it will look at the current epoch number for that chain, and then pull the array mapped to that number.  It will also pull the array for "current epoch" - 1, just to make sure nobody gets missed.
+
+Those arrays contain Departure structs with the pilot's departure timestamp inside, which Godot can then compare to the pilot's most recent arrival time on the destination chain.  If the departure time is greater than the arrival time, we know the ship is still in transit.
+
+
