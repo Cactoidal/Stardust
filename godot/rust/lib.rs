@@ -180,11 +180,11 @@ NewFuture(Ok(()))
 
 #[method]
 #[tokio::main]
-async fn ccip_send(key: PoolArray<u8>, chain_id: u64, stardust_address: GodotString, rpc: GodotString, chain_selector: GodotString, destination_address: GodotString) -> NewFuture {
+async fn ccip_send(key: PoolArray<u8>, chain_id: u64, stardust_address: GodotString, rpc: GodotString, chain_selector: GodotString, destination_address: GodotString, cargo: GodotString) -> NewFuture {
 
 let vec = &key.to_vec();
 
-let keyset = &vec[..]; 
+let keyset = &vec[..];
      
 let prewallet : LocalWallet = LocalWallet::from_bytes(&keyset).unwrap();
     
@@ -205,7 +205,19 @@ let preselect: &str = &chain_selector.to_string();
 
 let selector: u64 = u64::from_str_radix(preselect, 16).unwrap();
 
-let tx = contract.ccip_send(u64::from(selector), destination, 1).send().await.unwrap().await.unwrap();
+let encode_string: &str = &cargo.to_string();
+
+let encoded = ethers::abi::AbiEncode::encode(encode_string);
+
+let mut sha =  openssl::sha::Sha256::new();
+
+sha.update(&encoded);
+
+let hashed = sha.finish();
+
+let bytes: ethers::types::Bytes = hashed.into();
+
+let tx = contract.ccip_send(u64::from(selector), destination, 1, bytes).send().await.unwrap().await.unwrap();
 
 NewFuture(Ok(()))
 
@@ -240,9 +252,8 @@ let prequery = contract.pilot_info(pilot).call().await.unwrap();
 let query = json!({
     "name": prequery.name,
     "level": prequery.level,
-    "shipSize": prequery.ship_size,
-    "cargoType": prequery.cargo_type,
-    "cargoAmount": prequery.cargo_amount,
+    "shipSize": prequery.hold_size,
+    "cargoType": prequery.cargo,
     "coinBalance": prequery.coin_balance,
     "job": prequery.job,
     "antimatterModule": prequery.antimatter_module,
@@ -306,7 +317,6 @@ fn get_abi_encode(encode: GodotString) -> Variant {
     let encode_string: &str = &encode.to_string();
 
     let encoded = ethers::abi::AbiEncode::encode(encode_string);
-
 
     let mut sha =  openssl::sha::Sha256::new();
 
