@@ -230,7 +230,7 @@ I haven't gone over the idea too thoroughly yet, but alternatively I could requi
 
 Therefore, the amount of padding necessary for security depends on the maximum size of the hold.  Six zeroes applied to the latter example:  0000001 0000001 00000010000.  Our would-be spoofer tries to claim 0000001 00000010000001 0000, but the leftover 0000 just isn't long enough to be a valid amount (and moreover, 10000001 would require a massive cargo hold, almost certainly much bigger than what the player has).
 
-Padding seems to be the way to go.  Since this demo is capped at a holdSize of 100, I won't go overboard with the zeroes, but a more secure system will need to take into acccount how large ships are expected to become.  Or just pick an improbably large number of zeroes from the get-go.
+Padding seems to be the way to go.  Since this demo is capped at a holdSize of 100, I won't go overboard with the zeroes, but a more secure system will need to take into account how large ships are expected to become.  Or just pick an improbably large number of zeroes from the get-go.
 
 I've edited my diagram above to account for this change, and I also moved the salt from the back of the string to the front.
 
