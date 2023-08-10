@@ -56,7 +56,7 @@ contract NewPilot is CCIPReceiver, Ownable {
     }
 
     mapping(address => Pilot) public pilots;
-    mapping(address => Departure) lastDeparted;
+    mapping(address => Departure) public lastDeparted;
     mapping(address => uint) public lastArrived;
 
     struct Departure {
@@ -65,7 +65,7 @@ contract NewPilot is CCIPReceiver, Ownable {
         uint departureTime;
     }
 
-    mapping (uint => Departure[]) epochs;
+    mapping (uint => Departure[]) public epochs;
     uint public currentEpoch = 1;
     uint public epochTime;
     
@@ -165,17 +165,22 @@ contract NewPilot is CCIPReceiver, Ownable {
 
     //   CARGO   //
 
-    mapping (address => address) claimantsAgainst;
-    mapping (address => uint) claimantDeposits;
-    mapping (address => uint) claimantRewards;
+
+    mapping (address => address) public claimantsAgainst;
+    mapping (address => uint) public claimantRewards;
 
     function makeClaim(address _pilot) public {
-        if (claimantDeposits[msg.sender] == 0) {
-            require(pilots[msg.sender].coinBalance >= 100);
-            pilots[msg.sender].coinBalance -= 100;
-            claimantDeposits[msg.sender] += 100;
-        }
-        claimantsAgainst[_pilot] = msg.sender; 
+        //an incoming ship can only have 1 claim against it
+        require(claimantsAgainst[_pilot] == address(0x0));
+        
+        // checks that the claimant's deposit balance is valid.
+        // turned off for demonstration purposes
+
+        //require(pilots[msg.sender].onChain == true);
+        //require(pilots[msg.sender].coinBalance >= 100);
+        //pilots[msg.sender].coinBalance -= 100;
+
+        claimantsAgainst[_pilot] = msg.sender;
     }
 
     function declareCargo(string calldata amount1, string calldata amount2, string calldata amount3, string calldata salt) public {
@@ -200,11 +205,10 @@ contract NewPilot is CCIPReceiver, Ownable {
         if (claimantsAgainst[msg.sender] != address(0x0)) {
             if (converted_amount3 > 0) {
                 caught = true;
-                claimantRewards[claimantsAgainst[msg.sender]] += cost / 10;
+                claimantRewards[claimantsAgainst[msg.sender]] += (cost / 10) + 100;
             }
             else {
-                pilots[msg.sender].coinBalance += claimantDeposits[claimantsAgainst[msg.sender]];
-                claimantDeposits[claimantsAgainst[msg.sender]] = 0;
+                pilots[msg.sender].coinBalance += 100;
             }
             claimantsAgainst[msg.sender] = address(0x0);
         }
@@ -233,9 +237,11 @@ contract NewPilot is CCIPReceiver, Ownable {
 
 
     function takeReward() public {
+        require(pilots[msg.sender].onChain == true);
         pilots[msg.sender].coinBalance += claimantRewards[msg.sender];
         claimantRewards[msg.sender] = 0;
     }
+
 
      function getOutgoingPilots() public view returns (Departure[] memory) {
         return epochs[currentEpoch];
