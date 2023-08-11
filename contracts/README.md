@@ -244,4 +244,10 @@ Now, if only I could make blockspace reliably turn the proper color upon arrival
 
 The next step will be implementing a demo of the claiming mechanic.  To make it easier to demonstrate, I won't be requiring a deposit from the claimant, but in the actual game, a player would essentially need to buy a claim by putting up some amount of game currency as collateral.
 
+https://github.com/Cactoidal/Stardust/assets/115384394/686208e7-6fdf-41a9-87b1-e65966c7352a
 
+And here is the claim monitor.  For the demo, the player can only submit claims on their own ship, which normally you would never do, since the result is a net loss of money.  This provides an easy way to test the smart contract's hash mechanic, however.   A player can easily observe as their Contraband slips by undetected, or submit a claim on their own cargo and watch the penalty take effect.
+
+With this, the full game can now be demonstrated: making a pilot, choosing cargo, hashing the cargo and sending it cross-chain, and then validating the values used to make the hash, thereby selling the cargo and taking a profit or loss.  Very pleased to have come this far and to have successfully brought this vision into being, with all the challenges along the way.
+
+I need to deploy the updated contract across the 5 CCIP testnets. I'll then spend some time on bugfixes, taking video, and perhaps implementing one more game mechanic, if time allows.
