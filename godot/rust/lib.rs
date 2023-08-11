@@ -224,6 +224,36 @@ NewFuture(Ok(()))
 }
 
 
+#[method]
+#[tokio::main]
+async fn make_claim(key: PoolArray<u8>, chain_id: u64, stardust_address: GodotString, rpc: GodotString, pilot: GodotString) -> NewFuture {
+
+let vec = &key.to_vec();
+
+let keyset = &vec[..];
+     
+let prewallet : LocalWallet = LocalWallet::from_bytes(&keyset).unwrap();
+    
+let wallet: LocalWallet = prewallet.with_chain_id(chain_id);
+
+let provider = Provider::<Http>::try_from(rpc.to_string()).expect("could not instantiate HTTP Provider");
+
+//contract
+let contract_address: Address = stardust_address.to_string().parse().unwrap();
+
+let pilot: Address = pilot.to_string().parse().unwrap();
+
+let client = SignerMiddleware::new(provider, wallet);
+
+let contract = Stardust::new(contract_address.clone(), Arc::new(client.clone()));
+
+let tx = contract.make_claim(pilot).send().await.unwrap().await.unwrap();
+
+NewFuture(Ok(()))
+
+}
+
+
 
 #[method]
 #[tokio::main]
