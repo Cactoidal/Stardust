@@ -140,6 +140,7 @@ contract Stardust is CCIPReceiver, Ownable {
         newDeparture.pilot = _pilot;
         newDeparture.destinationSelector = _destination;
         newDeparture.departureTime = block.timestamp;
+        lastDeparted[msg.sender] = newDeparture;
         epochs[currentEpoch].push(newDeparture);
     }
 
@@ -172,6 +173,8 @@ contract Stardust is CCIPReceiver, Ownable {
     function makeClaim(address _pilot) public {
         //an incoming ship can only have 1 claim against it
         require(claimantsAgainst[_pilot] == address(0x0));
+        //ship can't already be docked on-chain
+        require(pilots[_pilot].onChain == false);
         
         // checks that the claimant's deposit balance is valid.
         // turned off for demonstration purposes
@@ -254,7 +257,9 @@ contract Stardust is CCIPReceiver, Ownable {
         return epochs[currentEpoch - 1];
     }
 
-
+    function getLastDeparted(address _pilot) public view returns (Departure memory) {
+        return lastDeparted[_pilot];
+    }
 
 
     // ACCESS CONTROL // 
