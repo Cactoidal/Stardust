@@ -2,6 +2,7 @@ extends RayCast
 
 var pending_reward = 0
 var check_cargo_sold_timer = 0
+var previous_balance = 0
 
 func _process(delta):
 		if check_cargo_sold_timer > 0:
@@ -66,7 +67,10 @@ func _process(delta):
 								file.open("user://keystore", File.READ)
 								var content = file.get_buffer(32)
 								var manifest = Global.cargo_console.read_manifest()
+								
 								pending_reward =  String((int(manifest[1]) * 2) + (int(manifest[2]) * 12) + (int(manifest[3]) * 22))
+								
+								previous_balance = parse_json(Global.pilot)["coinBalance"].hex_to_int()
 								var source = Global.get_chain_info(Global.current_chain)
 								var success = Ccip.declare_cargo(content, source["chain_id"], source["stardust_contract"], source["rpc"], manifest[0], manifest[1], manifest[2], manifest[3])
 								file.close()
@@ -116,7 +120,13 @@ func _process(delta):
 
 
 func complete_cargo_sold():
-	Global.reticle.get_parent().get_node("Reward").text = "REWARD: +" + pending_reward + " MONEY"
+	print( String( parse_json(Global.pilot)["coinBalance"].hex_to_int()))
+	print(String(previous_balance))
+	var outcome = parse_json(Global.pilot)["coinBalance"].hex_to_int() - previous_balance
+	if outcome < 0:
+		Global.reticle.get_parent().get_node("Reward").text = "CONTRABAND DETECTED! " + String(outcome) + " MONEY"
+	else:
+		Global.reticle.get_parent().get_node("Reward").text = "REWARD: +" + String(outcome) + " MONEY"
 	Global.reticle.get_parent().get_node("Reward").visible = true
 	Global.reticle.get_parent().get_parent().reward_visible_timer = 3
 	var empty_manifest = File.new()
