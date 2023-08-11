@@ -12,6 +12,8 @@ func _ready():
 	
 	if Global.start_in_warp == true:
 		$Destination.texture = load("res://buttons/chainlink.png")
+		$Timer.text = "IN TRANSIT"
+		$Timer.visible = true
 
 	if parse_json(Global.pilot)["cargo"] != "0x":
 		Global.must_sell = true

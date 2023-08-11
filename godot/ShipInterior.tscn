@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=2]
+[gd_scene load_steps=69 format=2]
 
 [ext_resource path="res://Player.gd" type="Script" id=1]
 [ext_resource path="res://Sphere.gd" type="Script" id=2]
@@ -9,6 +9,8 @@
 [ext_resource path="res://Blockspace.tscn" type="PackedScene" id=7]
 [ext_resource path="res://RouteLogo.gd" type="Script" id=8]
 [ext_resource path="res://MusicPlayer.tscn" type="PackedScene" id=9]
+[ext_resource path="res://CargoInterface.tscn" type="PackedScene" id=10]
+[ext_resource path="res://ShipView.tscn" type="PackedScene" id=11]
 
 [sub_resource type="CubeMesh" id=1]
 size = Vector3( 80, 20, 40 )
@@ -56,6 +58,7 @@ emission_on_uv2 = false
 
 [sub_resource type="PlaneMesh" id=14]
 material = SubResource( 13 )
+size = Vector2( 1.9, 1.9 )
 
 [sub_resource type="ViewportTexture" id=33]
 viewport_path = NodePath("Console/Screen/Sprite3D/Viewport")
@@ -193,7 +196,86 @@ emission_on_uv2 = false
 
 [sub_resource type="QuadMesh" id=39]
 material = SubResource( 38 )
-size = Vector2( 2, 2 )
+size = Vector2( 1.9, 1.9 )
+
+[sub_resource type="SpatialMaterial" id=42]
+albedo_color = Color( 0, 0, 0, 1 )
+
+[sub_resource type="CubeMesh" id=43]
+material = SubResource( 42 )
+size = Vector3( 2, 4, 2 )
+
+[sub_resource type="SpatialMaterial" id=44]
+albedo_color = Color( 0, 0, 0, 1 )
+
+[sub_resource type="CubeMesh" id=45]
+material = SubResource( 44 )
+size = Vector3( 70, 2, 2 )
+
+[sub_resource type="SpatialMaterial" id=46]
+emission_enabled = true
+emission = Color( 0, 0.858824, 1, 1 )
+emission_energy = 10.0
+emission_operator = 0
+emission_on_uv2 = false
+
+[sub_resource type="CubeMesh" id=47]
+material = SubResource( 46 )
+size = Vector3( 0.1, 0.3, 0.5 )
+
+[sub_resource type="SpatialMaterial" id=48]
+albedo_color = Color( 0, 0, 0, 1 )
+
+[sub_resource type="QuadMesh" id=49]
+material = SubResource( 48 )
+size = Vector2( 11, 13 )
+
+[sub_resource type="SpatialMaterial" id=50]
+albedo_color = Color( 0, 0, 0, 1 )
+
+[sub_resource type="QuadMesh" id=51]
+material = SubResource( 50 )
+size = Vector2( 5, 7 )
+
+[sub_resource type="SpatialMaterial" id=52]
+albedo_color = Color( 0, 0, 0, 1 )
+
+[sub_resource type="CubeMesh" id=53]
+material = SubResource( 52 )
+size = Vector3( 5, 2, 2 )
+
+[sub_resource type="SpatialMaterial" id=54]
+emission_enabled = true
+emission = Color( 0, 0.152941, 1, 1 )
+emission_energy = 20.0
+emission_operator = 0
+emission_on_uv2 = false
+
+[sub_resource type="QuadMesh" id=55]
+material = SubResource( 54 )
+size = Vector2( 4.9, 1.9 )
+
+[sub_resource type="ViewportTexture" id=56]
+viewport_path = NodePath("CargoConsole/Screen/Sprite3D/Viewport")
+
+[sub_resource type="BoxShape" id=57]
+extents = Vector3( 0.3, 0.5, 0.3 )
+
+[sub_resource type="SpatialMaterial" id=58]
+albedo_color = Color( 0, 0, 0, 1 )
+
+[sub_resource type="CubeMesh" id=59]
+material = SubResource( 58 )
+size = Vector3( 7, 5, 1 )
+
+[sub_resource type="ViewportTexture" id=60]
+viewport_path = NodePath("ClaimMonitor/Sprite3D/Viewport")
+
+[sub_resource type="CubeMesh" id=61]
+size = Vector3( 2, 1, 2 )
+
+[sub_resource type="BoxShape" id=62]
+extents = Vector3( 1, 0.504613, 1 )
 
 [node name="ShipInterior" type="Spatial"]
 
@@ -217,6 +299,24 @@ operation = 2
 width = 8.0
 height = 10.0
 depth = 30.0
+
+[node name="CSGBox3" type="CSGBox" parent="CSGCombiner"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -38.9984, -2.98514, 0 )
+operation = 2
+height = 12.0
+depth = 10.0
+
+[node name="CSGBox4" type="CSGBox" parent="CSGCombiner"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -24.1293, -5.99387, 18.9292 )
+operation = 2
+width = 4.0
+height = 6.0
+
+[node name="CSGBox5" type="CSGBox" parent="CSGCombiner"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -24.1293, -5.98488, -18.9402 )
+operation = 2
+width = 4.0
+height = 6.0
 
 [node name="Window" type="MeshInstance" parent="."]
 transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 39.5772, -0.668728, 0 )
@@ -282,14 +382,14 @@ margin_right = 10.0
 margin_bottom = 10.0
 color = Color( 1, 1, 1, 0.196078 )
 
-[node name="Loading" type="Label" parent="Player/Reticle"]
+[node name="Reward" type="Label" parent="Player/Reticle"]
 visible = false
 margin_left = -493.0
 margin_top = 272.0
 margin_right = -384.0
 margin_bottom = 297.0
 rect_scale = Vector2( 2, 2 )
-text = "LOADING..."
+text = "+100 MONEY"
 
 [node name="Console" type="MeshInstance" parent="."]
 transform = Transform( 2, 0, 0, 0, 1, 0, 0, 0, 1, 7.09504, -8.25251, 17.9678 )
@@ -306,7 +406,7 @@ mesh = SubResource( 14 )
 [node name="OmniLight" type="OmniLight" parent="Console/Screen"]
 transform = Transform( 0.5, 0, 0, 0, 1, 0, 0, 0, 1, 0.0596166, 1.96893, -0.403868 )
 light_color = Color( 0, 0.180392, 1, 1 )
-light_energy = 0.01
+light_energy = 0.03
 omni_range = 6.48755
 
 [node name="Sprite3D" type="Sprite3D" parent="Console/Screen"]
@@ -427,3 +527,122 @@ omni_range = 6.48755
 
 [node name="MusicPlayer" parent="." instance=ExtResource( 9 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2.97031, -7.98342, 17.7813 )
+
+[node name="VentFront" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 28.2798, 7.03357, -10.7899 )
+mesh = SubResource( 43 )
+
+[node name="VentBack" type="MeshInstance" parent="VentFront"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -35.2337, -0.987712, 0 )
+mesh = SubResource( 45 )
+
+[node name="Doors" type="Spatial" parent="."]
+
+[node name="DoorLight1" type="MeshInstance" parent="Doors"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -38.95, -6.2, -5.913 )
+mesh = SubResource( 47 )
+skeleton = NodePath("../..")
+
+[node name="DoorLight2" type="MeshInstance" parent="Doors"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -21.2918, -6.02475, -18.9527 )
+mesh = SubResource( 47 )
+skeleton = NodePath("../..")
+
+[node name="DoorLight3" type="MeshInstance" parent="Doors"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -27.089, -6.25898, 18.9439 )
+mesh = SubResource( 47 )
+skeleton = NodePath("../..")
+
+[node name="BayDoor" type="MeshInstance" parent="Doors"]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -39.9001, -3.08086, 0 )
+mesh = SubResource( 49 )
+skeleton = NodePath("../..")
+
+[node name="SideDoor1" type="MeshInstance" parent="Doors"]
+transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -24.1261, -5.9601, 19.8502 )
+mesh = SubResource( 51 )
+skeleton = NodePath("../..")
+
+[node name="SideDoor2" type="MeshInstance" parent="Doors"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -24.1261, -5.9601, -19.9286 )
+mesh = SubResource( 51 )
+skeleton = NodePath("../..")
+
+[node name="CargoConsole" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 0.96327, 0.268533, 0, -0.268533, 0.96327, 7.15289, -4.22093, 19.0396 )
+mesh = SubResource( 53 )
+
+[node name="Screen" type="MeshInstance" parent="CargoConsole"]
+transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -1.00215 )
+mesh = SubResource( 55 )
+
+[node name="Sprite3D" type="Sprite3D" parent="CargoConsole/Screen"]
+transform = Transform( 1, 1.77636e-14, -7.10543e-14, 0, 1, 0, -7.10543e-15, 0, 1, 0.114283, -0.240385, 0.01227 )
+texture = SubResource( 56 )
+
+[node name="Viewport" type="Viewport" parent="CargoConsole/Screen/Sprite3D"]
+size = Vector2( 450, 200 )
+transparent_bg = true
+render_target_v_flip = true
+
+[node name="CargoInterface" parent="CargoConsole/Screen/Sprite3D/Viewport" instance=ExtResource( 10 )]
+
+[node name="Anodyne" type="StaticBody" parent="CargoConsole/Screen/Sprite3D"]
+collision_layer = 8
+collision_mask = 8
+
+[node name="CollisionShape" type="CollisionShape" parent="CargoConsole/Screen/Sprite3D/Anodyne"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.46351, 0.365856, -0.101986 )
+shape = SubResource( 57 )
+
+[node name="Tech" type="StaticBody" parent="CargoConsole/Screen/Sprite3D"]
+collision_layer = 8
+collision_mask = 8
+
+[node name="CollisionShape" type="CollisionShape" parent="CargoConsole/Screen/Sprite3D/Tech"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.193988, 0.365856, -0.101986 )
+shape = SubResource( 57 )
+
+[node name="Contraband" type="StaticBody" parent="CargoConsole/Screen/Sprite3D"]
+collision_layer = 8
+collision_mask = 8
+
+[node name="CollisionShape" type="CollisionShape" parent="CargoConsole/Screen/Sprite3D/Contraband"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.07691, 0.365856, -0.101986 )
+shape = SubResource( 57 )
+
+[node name="ClaimMonitor" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 6.82759, -4.1451, -18.8293 )
+mesh = SubResource( 59 )
+
+[node name="Sprite3D" type="Sprite3D" parent="ClaimMonitor"]
+transform = Transform( 6.5, 0, 0, 0, 4.5, 0, 0, 0, 1, 0, 0, 0.50452 )
+texture = SubResource( 60 )
+
+[node name="Viewport" type="Viewport" parent="ClaimMonitor/Sprite3D"]
+size = Vector2( 100, 100 )
+own_world = true
+transparent_bg = true
+render_target_v_flip = true
+
+[node name="ShipView" parent="ClaimMonitor/Sprite3D/Viewport" instance=ExtResource( 11 )]
+
+[node name="MeshInstance" type="MeshInstance" parent="ClaimMonitor"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.75983, 0 )
+mesh = SubResource( 61 )
+
+[node name="Claim" type="Label3D" parent="ClaimMonitor/MeshInstance"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0432148, 1.00409 )
+pixel_size = 0.02
+text = "C L A I M
+D E M O"
+uppercase = true
+line_spacing = 5.0
+
+[node name="ClaimDemo" type="StaticBody" parent="ClaimMonitor/MeshInstance"]
+collision_layer = 8
+collision_mask = 8
+
+[node name="CollisionShape" type="CollisionShape" parent="ClaimMonitor/MeshInstance/ClaimDemo"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.336706 )
+shape = SubResource( 62 )

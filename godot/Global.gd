@@ -172,23 +172,3 @@ func complete_flight():
 		launch_console.get_node("Timer").text = "NO GAS THERE"
 	else:
 		launch_console.get_node("Timer").visible = false
-
-
-func get_departure_epoch():
-	var file = File.new()
-	file.open("user://keystore", File.READ)
-	var content = file.get_buffer(32)
-	Ccip.get_departure_epoch(content, get_chain_info(current_chain)["chain_id"], get_chain_info(current_chain)["stardust_contract"], get_chain_info(current_chain)["rpc"], user_address, self)
-	file.close()
-
-# Called from Rust
-func set_incoming_ships(var epoch1, var epoch2):
-	print(epoch1)
-	print(epoch2)
-	var valid_ships = []
-	#for ship in epoch1:
-		#check departure and arrival
-		#add valid
-	#for ship in epoch2:
-		#check departure and arrival
-		#add valid

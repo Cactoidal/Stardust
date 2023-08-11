@@ -11,9 +11,19 @@ var valid = true
 
 
 func _ready():
+	if Global.start_in_warp == true:
+		$HoldUsed.visible = false
+		$MoneySpent.visible = false
 	Global.cargo_console = self
 	money = parse_json(Global.pilot)["coinBalance"].hex_to_int()
 	hold_size = parse_json(Global.pilot)["holdSize"].hex_to_int()
+	
+	# to handle newly created pilots
+	if money == 0:
+		money = 50
+	if hold_size == 0:
+		hold_size = 100
+		
 	$MoneySpent/Amount.text = "0 / " + String(money)
 	$HoldUsed/Amount.text = "0 / " + String(hold_size)
 
@@ -75,3 +85,6 @@ func read_manifest():
 
 func update_money():
 	money = parse_json(Global.pilot)["coinBalance"].hex_to_int()
+	$HoldUsed.visible = true
+	$MoneySpent.visible = true
+	update_numbers()

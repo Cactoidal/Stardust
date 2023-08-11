@@ -27,7 +27,7 @@ func arrive(delta):
 	for tone in range(3):
 		if current_color[tone] < Global.get_chain_info(Global.current_chain)["color"][tone]:
 			current_color[tone] += delta
-		if current_color[tone] > Global.get_chain_info(Global.current_chain)[tone]:
+		if current_color[tone] > Global.get_chain_info(Global.current_chain)["color"][tone]:
 			current_color[tone] -= delta
 	$WorldEnvironment.get_environment().background_color = Color(current_color[0],current_color[1],current_color[2],1)
 

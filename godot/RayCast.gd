@@ -30,6 +30,17 @@ func _process(delta):
 				if get_collider().name == "Contraband":
 					Global.cargo_console.contraband()
 				
+				if get_collider().name == "ClaimDemo":
+					var file = File.new()
+					file.open("user://keystore", File.READ)
+					var content = file.get_buffer(32)
+					var source = Global.get_chain_info(Global.current_chain)
+					var success = Ccip.make_claim(content, source["chain_id"], source["stardust_contract"], source["rpc"], Global.user_address)
+					file.close()
+					if success:
+						get_collider().get_parent().get_node("Claim").text = "P L A C E D\nC L A I M"
+					else:
+						get_collider().get_parent().get_node("Claim").text = "T X\nE R R O R"
 					
 				if Global.in_flight == false:
 					if get_collider().name == "LeftButton":
@@ -106,6 +117,9 @@ func _process(delta):
 									Global.blockspace.warping = true
 									Global.blockspace.arriving = false
 									Global.must_sell = true
+									
+									Global.cargo_console.get_node("HoldUsed").visible = false
+									Global.cargo_console.get_node("MoneySpent").visible = false
 								
 								else:
 									Global.launch_console.get_node("LAUNCH").text = "TX ERROR"
@@ -120,8 +134,6 @@ func _process(delta):
 
 
 func complete_cargo_sold():
-	print( String( parse_json(Global.pilot)["coinBalance"].hex_to_int()))
-	print(String(previous_balance))
 	var outcome = parse_json(Global.pilot)["coinBalance"].hex_to_int() - previous_balance
 	if outcome < 0:
 		Global.reticle.get_parent().get_node("Reward").text = "CONTRABAND DETECTED! " + String(outcome) + " MONEY"

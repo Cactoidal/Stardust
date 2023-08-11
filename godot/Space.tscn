@@ -72,6 +72,11 @@ material = SubResource( 8 )
 size = Vector2( 200, 150 )
 
 [sub_resource type="Environment" id=11]
+fog_color = Color( 0.133333, 0.517647, 0.901961, 1 )
+fog_sun_color = Color( 1, 0.901961, 0.701961, 1 )
+fog_depth_begin = 50.0
+fog_depth_end = 1.0
+fog_transmit_enabled = true
 dof_blur_far_enabled = true
 dof_blur_far_distance = 20.0
 dof_blur_far_transition = 10.0
@@ -80,6 +85,8 @@ dof_blur_near_distance = 12.0
 glow_enabled = true
 glow_intensity = 0.1
 glow_bloom = 0.1
+adjustment_enabled = true
+adjustment_saturation = 1.75
 
 [node name="Space" type="Spatial"]
 
