@@ -226,7 +226,7 @@ For instance, let's say my real values were 9, 8, and 10.  When I arrive at my d
 
 Of course, I wouldn't code the game to allow this kind of cheating, but someone playing directly through the contract (or with a modified game) could do it easily.  One option would be to enforce single-digit limits for each amount.  This however places a cap on the maximum size of the ship, which isn't really desirable.
 
-I haven't gone over the idea too thoroughly yet, but alternatively I could require padding of digits with a 0 in the front.  Our above example becomes 09 08 010, which seems impossible to spoof; the player can't claim a different valid combination that would avoid detection of Contraband.  But let's say that cargo holds become quite large, and someone attempts to bridge 01 01 010000.  Our smuggler could feign innocence with a claim of 01 010100 00. 
+I haven't gone over the idea too thoroughly yet, but alternatively I could require padding of digits with a 0 in the front.  Our above example becomes 09 08 010, which seems impossible to spoof; the player can't claim a different valid combination that would avoid detection of Contraband.  But let's say that cargo holds become quite large, and someone attempts to bridge 01 01 010000.  If caught, our smuggler could feign innocence with a claim of 01 010100 00. 
 
 Therefore, the amount of padding necessary for security depends on the maximum size of the hold.  Six zeroes applied to the latter example:  0000001 0000001 00000010000.  Our would-be spoofer tries to claim 0000001 00000010000001 0000, but the leftover 0000 just isn't long enough to be a valid amount (and moreover, 10000001 would require a massive cargo hold, almost certainly much bigger than what the player has).
 
