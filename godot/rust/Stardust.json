@@ -146,7 +146,7 @@
 				"type": "address"
 			},
 			{
-				"internalType": "enum NewPilot.PayFeesIn",
+				"internalType": "enum Stardust.PayFeesIn",
 				"name": "payFeesIn",
 				"type": "uint8"
 			},
@@ -392,6 +392,42 @@
 		"type": "function"
 	},
 	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_pilot",
+				"type": "address"
+			}
+		],
+		"name": "getLastDeparted",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "pilot",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "destinationSelector",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "departureTime",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct Stardust.Departure",
+				"name": "",
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [],
 		"name": "getOutgoingPilots",
 		"outputs": [
@@ -413,7 +449,7 @@
 						"type": "uint256"
 					}
 				],
-				"internalType": "struct NewPilot.Departure[]",
+				"internalType": "struct Stardust.Departure[]",
 				"name": "",
 				"type": "tuple[]"
 			}
@@ -443,7 +479,7 @@
 						"type": "uint256"
 					}
 				],
-				"internalType": "struct NewPilot.Departure[]",
+				"internalType": "struct Stardust.Departure[]",
 				"name": "",
 				"type": "tuple[]"
 			}
@@ -606,7 +642,7 @@
 						"type": "bool"
 					}
 				],
-				"internalType": "struct NewPilot.Pilot",
+				"internalType": "struct Stardust.Pilot",
 				"name": "",
 				"type": "tuple"
 			}
