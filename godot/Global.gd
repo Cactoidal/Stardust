@@ -33,17 +33,9 @@ var arbitrum_faucet = "https://faucet.quicknode.com/arbitrum/goerli"
 
 var fuji_stardust = "0x8e2735402D348E4f3183E15C13dD2b4e14e148E9"
 var mumbai_stardust = "0xA8FaA189B6625AF213243fB346d463789d506480"
-
-#not deployed yet
-var sepolia_stardust = "0x822D1FcC6544Ec59dce2A68A4c6507a3D099496b"
-var optimism_stardust = "0x78FE5243cf6143d98C8b5847c8E1b15Cf53D8338"
-var arbitrum_stardust = "0x78FE5243cf6143d98C8b5847c8E1b15Cf53D8338"
-
-#var fuji_stardust = "0x091ec5F9c7d12DfCa9468f662e2f395Cb9656c75"
-#var mumbai_stardust = "0xF0c3F3Ef23ACF07764e42342e85eE248A9bEd081"
-#var sepolia_stardust = "0x822D1FcC6544Ec59dce2A68A4c6507a3D099496b"
-#var optimism_stardust = "0x78FE5243cf6143d98C8b5847c8E1b15Cf53D8338"
-#var arbitrum_stardust = "0x78FE5243cf6143d98C8b5847c8E1b15Cf53D8338"
+var sepolia_stardust = "0x9C9315eb4E542C910301c17E81F40192124fD778"
+var optimism_stardust = "0xf09839D028B59c6eDF4D0BF0Af7961D7fbEbE9F0"
+var arbitrum_stardust = "0xE67dD115DDB112771c519926d1F7c4F9e973c960"
 
 var fuji_id = 43113
 var mumbai_id = 80001
@@ -57,7 +49,7 @@ var sepolia_selector = "de41ba4fc9d91ad9"
 var optimism_selector = "24f9b897ef58a922"
 var arbitrum_selector = "54abf9fb1afeaf95"
 
-var fuji_flight_time = 500
+var fuji_flight_time = 300
 var optimism_flight_time = 1500
 var arbitrum_flight_time = 1500
 var mumbai_flight_time = 1500
@@ -131,9 +123,8 @@ func check_pilot():
 	var content = file.get_buffer(32)
 	var located = false
 	
-	for lookup in ["Fuji", "Mumbai"]:
+	for lookup in ["Optimism", "Arbitrum", "Sepolia", "Fuji", "Mumbai"]:
 		if located == false:
-	#for lookup in ["Optimism", "Arbitrum", "Sepolia", "Fuji", "Mumbai"]:
 			var chain = get_chain_info(lookup)
 			Ccip.pilot_info(content, chain["chain_id"], chain["stardust_contract"], chain["rpc"], user_address, self)
 			if parse_json(pilot).onChain == true:
