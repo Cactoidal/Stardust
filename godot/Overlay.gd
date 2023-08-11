@@ -101,17 +101,19 @@ func check_pilot():
 	var content = file.get_buffer(32)
 	var located = false
 	
-	for lookup in ["Optimism", "Arbitrum", "Sepolia", "Fuji", "Mumbai"]:
-		var chain = Global.get_chain_info(lookup)
-		Ccip.pilot_info(content, chain["chain_id"], chain["stardust_contract"], chain["rpc"], Global.user_address, self)
-		if parse_json(Global.pilot).onChain == true:
-			print(lookup)
-			Global.current_chain = lookup
-			located = true
-			gas_ok = true
-			Global.available_chains.erase(lookup)
-			Global.destination_chain = Global.available_chains[0]
-			Global.chain_selector = 0
+	for lookup in ["Fuji", "Mumbai"]:
+		if located == false:
+	#for lookup in ["Optimism", "Arbitrum", "Sepolia", "Fuji", "Mumbai"]:
+			var chain = Global.get_chain_info(lookup)
+			Ccip.pilot_info(content, chain["chain_id"], chain["stardust_contract"], chain["rpc"], Global.user_address, self)
+			if parse_json(Global.pilot).onChain == true:
+				print(lookup)
+				Global.current_chain = lookup
+				located = true
+				gas_ok = true
+				Global.available_chains.erase(lookup)
+				Global.destination_chain = Global.available_chains[0]
+				Global.chain_selector = 0
 			#set location indicators inside ship
 		
 		
@@ -120,7 +122,8 @@ func check_pilot():
 		if ephem_departure_time == 0:
 			get_balance()
 			var enabled_chains = 0
-			for another_lookup in ["Optimism", "Arbitrum", "Sepolia", "Fuji", "Mumbai"]:
+			for another_lookup in ["Fuji", "Mumbai"]:
+			#for another_lookup in ["Optimism", "Arbitrum", "Sepolia", "Fuji", "Mumbai"]:
 				if Global.get_chain_info(another_lookup)["player_balance"] > 0:
 					Global.current_chain = another_lookup
 					enabled_chains += 1
@@ -142,7 +145,8 @@ func get_departure_time():
 	var file = File.new()
 	file.open("user://keystore", File.READ)
 	var content = file.get_buffer(32)
-	for lookup in ["Optimism", "Arbitrum", "Sepolia", "Fuji", "Mumbai"]:
+	for lookup in ["Fuji", "Mumbai"]:
+	#for lookup in ["Optimism", "Arbitrum", "Sepolia", "Fuji", "Mumbai"]:
 		var chain = Global.get_chain_info(lookup)
 		chain_check = lookup
 		Ccip.get_departure(content, chain["chain_id"], chain["stardust_contract"], chain["rpc"], Global.user_address, self)
@@ -150,17 +154,27 @@ func get_departure_time():
 	
 #Called from Rust
 func set_departure_time(var departure):
-	if int(departure) > ephem_departure_time:
-		ephem_departure_time = int(departure)
-		Global.current_chain = chain_check
+	
+	var chain = parse_json(departure)["destinationSelector"].right(2)
+	var timestamp = parse_json(departure)["departureTime"].hex_to_int()
+	
+	var fuji = Global.fuji_selector
+	var mumbai = Global.mumbai_selector
+	var sepolia = Global.sepolia_selector
+	var optimism = Global.optimism_selector
+	var arbitrum = Global.arbitrum_selector
+	
+	match chain:
+		fuji: chain = "Fuji"
+		mumbai: chain = "Mumbai"
+		sepolia: chain = "Sepolia"
+		optimism: chain = "Optimism"
+		arbitrum: chain = "Arbitrum"
+	
+	if timestamp > ephem_departure_time:
+		ephem_departure_time = timestamp
+		Global.current_chain = chain
 
-
-func pilot_info():
-	var file = File.new()
-	file.open("user://keystore", File.READ)
-	var content = file.get_buffer(32)
-	Ccip.pilot_info(content, Global.mumbai_id, Global.mumbai_stardust, Global.mumbai_rpc, Global.user_address, self)
-	file.close()
 
 #Called from Rust
 func set_pilot(var _pilot):
