@@ -31,8 +31,8 @@ var optimism_faucet = "https://app.optimism.io/faucet"
 var arbitrum_faucet = "https://faucet.quicknode.com/arbitrum/goerli"
 
 
-var fuji_stardust = "0x9F20F2CdE8b064D969E0ea2EcaC106180079E185"
-var mumbai_stardust = "0xc3676cCa77a0205811FAcEACa5EA6b7d3eB69b32"
+var fuji_stardust = "0x8e2735402D348E4f3183E15C13dD2b4e14e148E9"
+var mumbai_stardust = "0xA8FaA189B6625AF213243fB346d463789d506480"
 
 #not deployed yet
 var sepolia_stardust = "0x822D1FcC6544Ec59dce2A68A4c6507a3D099496b"
@@ -51,13 +51,13 @@ var sepolia_id = 11155111
 var optimism_id = 420
 var arbitrum_id = 421613
 
-var fuji_selector = "CCF0A31A221F3C9B"
-var mumbai_selector = "ADECC60412CE25A5"
-var sepolia_selector = "DE41BA4FC9D91AD9"
-var optimism_selector = "24F9B897EF58A922"
-var arbitrum_selector = "54ABF9FB1AFEAF95"
+var fuji_selector = "ccf0a31a221f3c9b"
+var mumbai_selector = "adecc60412ce25a5"
+var sepolia_selector = "de41ba4fc9d91ad9"
+var optimism_selector = "24f9b897ef58a922"
+var arbitrum_selector = "54abf9fb1afeaf95"
 
-var fuji_flight_time = 300
+var fuji_flight_time = 500
 var optimism_flight_time = 1500
 var arbitrum_flight_time = 1500
 var mumbai_flight_time = 1500
@@ -88,6 +88,7 @@ var route_logo
 var reticle
 
 var must_sell = false
+	
 
 func get_chain_info(var chain):
 	match chain:
@@ -131,18 +132,19 @@ func check_pilot():
 	var located = false
 	
 	for lookup in ["Fuji", "Mumbai"]:
+		if located == false:
 	#for lookup in ["Optimism", "Arbitrum", "Sepolia", "Fuji", "Mumbai"]:
-		var chain = get_chain_info(lookup)
-		Ccip.pilot_info(content, chain["chain_id"], chain["stardust_contract"], chain["rpc"], user_address, self)
-		if parse_json(pilot).onChain == true:
-			current_chain = lookup
-			located = true
-			available_chains.erase(lookup)
-			destination_chain = available_chains[0]
-			chain_selector = 0
-			entering_port_timer = -1
-			entering_port = false
-			return true
+			var chain = get_chain_info(lookup)
+			Ccip.pilot_info(content, chain["chain_id"], chain["stardust_contract"], chain["rpc"], user_address, self)
+			if parse_json(pilot).onChain == true:
+				current_chain = lookup
+				located = true
+				available_chains.erase(lookup)
+				destination_chain = available_chains[0]
+				chain_selector = 0
+				entering_port_timer = -1
+				entering_port = false
+				return true
 	
 	if located == false:
 		entering_port = true
@@ -161,6 +163,7 @@ func check_cargo_sold():
 	file.open("user://keystore", File.READ)
 	var content = file.get_buffer(32)
 	Ccip.pilot_info(content, get_chain_info(current_chain)["chain_id"], get_chain_info(current_chain)["stardust_contract"], get_chain_info(current_chain)["rpc"], user_address, self)
+	file.close()
 	if parse_json(pilot).cargo == "0x":
 		return true
 
@@ -178,3 +181,23 @@ func complete_flight():
 		launch_console.get_node("Timer").text = "NO GAS THERE"
 	else:
 		launch_console.get_node("Timer").visible = false
+
+
+func get_departure_epoch():
+	var file = File.new()
+	file.open("user://keystore", File.READ)
+	var content = file.get_buffer(32)
+	Ccip.get_departure_epoch(content, get_chain_info(current_chain)["chain_id"], get_chain_info(current_chain)["stardust_contract"], get_chain_info(current_chain)["rpc"], user_address, self)
+	file.close()
+
+# Called from Rust
+func set_incoming_ships(var epoch1, var epoch2):
+	print(epoch1)
+	print(epoch2)
+	var valid_ships = []
+	#for ship in epoch1:
+		#check departure and arrival
+		#add valid
+	#for ship in epoch2:
+		#check departure and arrival
+		#add valid
