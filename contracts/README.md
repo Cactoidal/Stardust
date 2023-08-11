@@ -251,3 +251,19 @@ And here is the claim monitor.  For the demo, the player can only submit claims 
 With this, the full game can now be demonstrated: making a pilot, choosing cargo, hashing the cargo and sending it cross-chain, and then validating the values used to make the hash, thereby selling the cargo and taking a profit or loss.  Very pleased to have come this far and to have successfully brought this vision into being, with all the challenges along the way.
 
 I need to deploy the updated contract across the 5 CCIP testnets. I'll then spend some time on bugfixes, taking video, and perhaps implementing one more game mechanic, if time allows.
+
+## DAY 8
+
+Well, it took many hours, but I put the video together and I think it's pretty great.  You can check it out in the project showcase, or [watch it here on YouTube.](https://www.youtube.com/watch?v=UxacJMLejRg)
+
+Indeed, today I also submitted my project.  I uploaded the final state of the game files, [released Stardustv2](https://github.com/Cactoidal/Stardust/releases), and finished writing my project page.  Here's hoping that others enjoy this project as much as I did.
+
+My final task is to top off the 5 contracts with LINK, which I'll take care of soon.  I'd still like to add 1 more feature to the game, which I will do, but may or may not amend to the final version, depending how it comes out.  I will write a bonus blog entry later to describe it.
+
+It's been a bit of a blur.  I've spent the last week extremely focused on this hackathon, and I'm really happy I was able to meet all of my goals.  I hope what I've written here is of use to those who enjoy Godot, who like blockchain games, or just like to read about tech and game design.  Thanks for reading, until next time!
+
+![cactus](https://github.com/Cactoidal/Stardust/assets/115384394/e0ced978-926a-4173-a7c1-8a84b44d5d86)
+
+
+
+
