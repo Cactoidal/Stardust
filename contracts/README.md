@@ -163,7 +163,7 @@ https://github.com/Cactoidal/Stardust/assets/115384394/15acf4e4-5c0a-475a-a0ea-e
 
 As it stands, many of my Rust-Godot interactions I've coded with the expectation that the main thread will wait for a response from Rust, and for everything involving Ethers-rs, Rust async will not proceed until it gets a response from an RPC node.  So with my current code patterns the lag is a necessity, since the game otherwise would crash trying to use data it hasn't been given yet.  If somehow I could get my RPC queries to run without lagging the main game thread, I would need to rewrite my gdscript to tolerate the lag in RPC response time.
 
-And there it is: [the pre-release of Stardust](https://github.com/Cactoidal/Stardust/releases), and all game files have been uploaded.  Checkpoint reached.  Now that I've hammered out the basic version of the game, it's time to add more game mechanics: cargo, and exploring the ship itself.
+And there it is: [the pre-release of Stardust](https://github.com/Cactoidal/Stardust/releases), and all game files have been uploaded.  Checkpoint reached.  Now that I've hammered out the basic version of the game, it's time to add another game mechanic: cargo.
 
 # DAY 6
 
@@ -250,15 +250,13 @@ And here is the claim monitor.  For the demo, the player can only submit claims 
 
 With this, the full game can now be demonstrated: making a pilot, choosing cargo, hashing the cargo and sending it cross-chain, and then validating the values used to make the hash, thereby selling the cargo and taking a profit or loss.  Very pleased to have come this far and to have successfully brought this vision into being, with all the challenges along the way.
 
-I need to deploy the updated contract across the 5 CCIP testnets. I'll then spend some time on bugfixes, taking video, and perhaps implementing one more game mechanic, if time allows.
+I need to deploy the updated contract across the 5 CCIP testnets. I'll then spend some time on bugfixes and taking video.
 
 ## DAY 8
 
 Well, it took many hours, but I put the video together and I think it's pretty great.  You can check it out in the project showcase, or [watch it here on YouTube.](https://www.youtube.com/watch?v=UxacJMLejRg)
 
-Indeed, today I also submitted my project.  I uploaded the final state of the game files, [released Stardustv2](https://github.com/Cactoidal/Stardust/releases), and finished writing my project page.  Here's hoping that others enjoy this project as much as I did.
-
-My final task is to top off the 5 contracts with LINK, which I'll take care of soon.  I'd still like to add 1 more feature to the game, which I will do, but may or may not amend to the final version, depending how it comes out.  I will write a bonus blog entry later to describe it.
+Indeed, today I also submitted my project.  I uploaded the final state of the game files, [released Stardustv2](https://github.com/Cactoidal/Stardust/releases), and finished writing my project page.  My final task is to top off the 5 contracts with LINK, which I'll take care of soon.  Here's hoping that others enjoy this project as much as I did.
 
 It's been a bit of a blur.  I've spent the last week extremely focused on this hackathon, and I'm really happy I was able to meet all of my goals.  I hope what I've written here is of use to those who enjoy Godot, who like blockchain games, or just like to read about tech and game design.  Thanks for reading, until next time!
 
